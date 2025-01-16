@@ -1,0 +1,14 @@
+# holds database url
+config.py
+
+# python cache
+__pycache__/
+*.pyc
+*.pyo 
+
+
+# macOS system files
+.DS_Store
+
+# Virtual environment
+env/
