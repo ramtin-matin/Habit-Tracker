@@ -7,21 +7,20 @@ from typing import Optional
 
 
 class HabitStatus(str, Enum):
-    INCOMPLETE = "Incomplete"
-    DONE = "Done"
-    MISSED = "Missed"
-    SKIPPED = "Skipped"
+    INCOMPLETE = "INCOMPLETE"
+    DONE = "DONE"
+    MISSED = "MISSED"
+    SKIPPED = "SKIPPED"
 
 
 # Pydantic schema
 
 
-class Habit(BaseModel):
-    habitId: int
-    habitName: str
-    habitStatus: HabitStatus = HabitStatus.INCOMPLETE  # Default status
-    habitStartDate: date
-    habitDescription: Optional[str] = None  # Optional description
+class CreateHabit(BaseModel):
+    habit_name: str
+    habit_status: HabitStatus = HabitStatus.INCOMPLETE  # Default status
+    habit_start_date: date
+    habit_description: Optional[str] = None  # Optional description
 
     class Config:
         orm_mode = True

@@ -2,18 +2,18 @@ from sqlalchemy import Column, Integer, String, Date, Enum
 from app.database import Base
 from enum import Enum as PyEnum
 
-# Define the Enum for Habit Status
-
 
 class HabitStatus(PyEnum):
-    DONE = "Done"
-    MISSED = "Missed"
-    SKIPPED = "Skipped"
+    INCOMPLETE = "INCOMPLETE"
+    DONE = "DONE"
+    MISSED = "MISSED"
+    SKIPPED = "SKIPPED"
+
 
 # Define the Habit model
 
 
-class Habit(Base):
+class HabitSchema(Base):
     __tablename__ = "habits"
 
     habit_id = Column(Integer, primary_key=True, index=True)
