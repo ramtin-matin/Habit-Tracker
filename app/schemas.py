@@ -15,7 +15,6 @@ class HabitStatus(str, Enum):
 
 # Pydantic schema
 
-
 class CreateHabit(BaseModel):
     habit_name: str
     habit_status: HabitStatus = HabitStatus.INCOMPLETE  # Default status

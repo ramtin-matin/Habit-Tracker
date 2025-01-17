@@ -12,3 +12,6 @@ __pycache__/
 
 # Virtual environment
 env/
+
+# React dependencies
+node_modules/
