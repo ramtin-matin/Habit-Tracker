@@ -1,0 +1,134 @@
+/* Sidebar Styling */
+.sidebar {
+  height: 98vh;
+  width: 25%; 
+  background: linear-gradient(-10deg, rgb(179, 119, 219), hwb(220 35% 5%), #c26ce7);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 35px;
+  margin-top: 1vh;
+  margin-left: 1vh;
+  transition: all 0.3s ease; 
+}
+
+.sidebar-logo {
+  font-size: 4.5vh;
+  font-family: "Futura", sans-serif;
+  margin-top: 10vh;
+  font-weight: bold;
+  margin-bottom: 1vh;
+  transition: background 0.3s ease, transform 0.4s;
+  cursor: default;
+}
+
+.sidebar-icon {
+  margin-right: 3vh; 
+  font-size: 2.5vh;
+}
+
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  margin-top: 4vh;
+}
+
+.sidebar-item {
+  width: 100%; 
+  padding: 2vh;
+  font-size: 2.5vh;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.4s;
+  font-family: "Futura", sans-serif;
+  border-radius: 8px;
+  display: flex;
+  margin-left: 65%;
+}
+
+.sidebar-item:hover {
+  transform: scale(1.03);
+
+}
+
+.sidebar-logo:hover {
+  transform: scale(1.04);
+}
+
+/* Medium Screens (Tablets) */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 35%; 
+    border-radius: 20px; 
+    margin-left: 0.5vh;
+    margin-right: 0.5vh;
+  }
+
+  .sidebar-icon {
+    margin-right: 2vh; 
+    font-size: 2vh; 
+  }
+
+  font-size: 3.5vh; 
+  .sidebar-logo {
+    margin-top: 8vh;
+    margin-bottom: 2vh;
+  }
+
+
+  .sidebar-menu {
+    align-items: flex-start; 
+    margin-left: 10px; 
+  }
+
+  .sidebar-item {
+    font-size: 18px; 
+    padding: 12px;
+    width: 90%; 
+  }
+}
+
+/* Small Screens (Phones) */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%; 
+    height: auto; 
+    border-radius: 0; 
+    margin: 0;
+    padding: 5px; 
+  }
+
+  .sidebar-icon {
+    margin-right: 1.5vh; 
+    font-size: 1.8vh; 
+  }
+
+  .sidebar-logo {
+    font-size: 2vh; 
+    margin-bottom: 5px;
+    margin-top: 5vh;
+  }
+
+  .sidebar-menu {
+    align-items: center; 
+    margin-top: 10px; 
+  }
+
+  .sidebar-item {
+    font-size: 14px; 
+    padding: 8px; 
+    width: 95%; 
+    text-align: center; 
+    margin: 5px 0; 
+  }
+
+  .sidebar-item:hover {
+    transform: scale(1.02); 
+  }
+}

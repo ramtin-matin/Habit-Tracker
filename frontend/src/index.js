@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-
-const App = () => {
-  return <h1>Hello, React!</h1>;
-};
+import './index.css';
+import App from './App.js';
 
 
-ReactDOM.render(<App />, document.getElementById('root'));
+
+ReactDOM.render(<App />, document.getElementById('main'))
