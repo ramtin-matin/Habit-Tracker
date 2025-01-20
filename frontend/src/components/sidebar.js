@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
+import App from '../App';
 import './sidebar.css';
 
-const Sidebar = () => {
+// setView is from src/App.js
+// allows us to change the state on user clicks
+const Sidebar = ({setView}) => {
   return (
   <div className="sidebar">
-    <h2 className="sidebar-logo">HabitSet</h2>
+    <h2 className="sidebar-logo" onClick={() => setView("Home")}>HabitSet</h2>
     <ul className="sidebar-menu">
-      <li className="sidebar-item sidebar-item--active">Home</li>
-      <li className="sidebar-item">Habit Clusters</li>
-      <li className="sidebar-item">Habit Stats</li>
-      <li className="sidebar-item">Account</li>
+      <button className="sidebar-item" onClick={() => setView("Home")}>
+        Home
+      </button>
+      <button className="sidebar-item" onClick={() => setView("Habit Clusters")}>
+        Habit Clusters
+      </button>
+      <button className="sidebar-item" onClick={() => setView("Habit Stats")}>
+          Habit Stats
+      </button>
+      <button className="sidebar-item" onClick={() => setView("Account")}>
+        Account
+      </button>
     </ul>
   </div>
   );
