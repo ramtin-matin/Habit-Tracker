@@ -1,8 +1,8 @@
 import React from 'react';
-import App from '../App';
+import App from '../../App';
 import './sidebar.css';
 
-// setView is from src/App.js
+// setView is from src/App.jsx
 // allows us to change the state on user clicks
 const Sidebar = ({setView}) => {
   return (
