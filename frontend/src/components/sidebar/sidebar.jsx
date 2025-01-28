@@ -1,5 +1,5 @@
 import React from 'react';
-import App from '../../App';
+
 import './sidebar.css';
 
 // setView is from src/App.jsx

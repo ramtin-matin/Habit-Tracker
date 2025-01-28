@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from 'react'
 import Sidebar from "./components/sidebar/sidebar";
 import Home from "./components/home/Home";
 import HabitClusters from "./components/habitClusters/HabitClusters";
 import HabitStats from "./components/habitStats/HabitStats";
 import Account from "./components/account/Account";
+import './App.css'
 
 const App = () => {
   // for when user clicks on sidebar to navigate
