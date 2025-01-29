@@ -5,13 +5,14 @@ import HabitClusters from "./components/habitClusters/HabitClusters";
 import HabitStats from "./components/habitStats/HabitStats";
 import Account from "./components/account/Account";
 import './App.css'
+import Habits from './components/Habits/habits';
 
 const App = () => {
   // for when user clicks on sidebar to navigate
   const [view, setView] = useState("Home");
 
   const renderPage = () => {
-    switch (view) {
+  switch (view) {
       case "Home":
         return <Home />;
       case "Habit Clusters":
@@ -20,6 +21,8 @@ const App = () => {
         return <HabitStats />;
       case "Account":
         return <Account />;
+      case "Habits":
+        return <Habits />;
       default:
         return <Home />;
     }
