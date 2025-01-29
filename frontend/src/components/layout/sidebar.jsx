@@ -1,0 +1,52 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+const Sidebar = () => {
+  const [active, setActive] = useState(localStorage.getItem("activeMenu") || "Home"); // Track active button
+  const menuItem = [
+  { name: "Home", path: "/Home" }, 
+  { name:"Habits", path: "/Habits" }, 
+  { name:"Habit Clusters", path: "/Habit-Clusters" }, 
+  { name:"Habit Stats", path: "/Habit-Stats"}, 
+  { name:"Account", path: "/Account" },
+];
+
+
+useEffect(() => {
+  localStorage.setItem("activeMenu", active);
+}, [active]);
+
+return (
+  <div className="flex h-screen flex-col justify-between bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))]">
+    <div className="px-4 py-6">
+      <Link to={"/Home"}>
+        <h1
+          className="text-4xl transition duration-300 ease-in-out cursor-pointer block px-6 py-8 font-bold text-white hover:scale-103 active:scale-99"
+          onClick={() => setActive("Home")}
+        >
+          HabitSet
+        </h1>
+      </Link>
+
+      <ul className="space-y-4">
+        {menuItem.map((item) => (
+          <li key={item.name}>
+            <Link to={item.path}>
+              <button
+                className={`uppercase transition duration-300 ease-in-out text-base cursor-pointer w-full max-w-80 block hover:scale-101 active:scale-99 rounded-2xl px-4 py-4 font-bold ${
+                  active === item.name ? "bg-white text-emerald-800" : "text-white"
+                }`}
+                onClick={() => setActive(item.name)} // Update active state
+              >
+                {item.name}
+              </button>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+);
+};
+
+export default Sidebar;
