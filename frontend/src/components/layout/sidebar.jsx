@@ -43,7 +43,7 @@ const Sidebar = () => {
             <li key={item.name}>
               <Link to={item.path}>
                 <button
-                  className={`uppercase transition duration-300 ease-in-out text-base cursor-pointer w-full max-w-80 block hover:scale-101 active:scale-99 rounded-2xl px-4 py-4 font-bold ${
+                  className={`uppercase transition duration-150 ease-in-out text-base cursor-pointer w-full max-w-80 block hover:scale-101 active:scale-99 rounded-2xl px-4 py-4 font-bold ${
                     active === item.name ? "bg-white text-emerald-600" : "text-white"
                   }`}
                   onClick={() => setActive(item.name)}

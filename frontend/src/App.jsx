@@ -5,13 +5,14 @@ import Habits from "./pages/dashboard/habits";
 import HabitClusters from "./pages/dashboard/HabitClusters";
 import HabitStats from "./pages/dashboard/HabitStats";
 import Account from "./pages/dashboard/Account";
+import './index.css';
 
 const App = () => {
 
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-10">
+      <div className="flex-1">
         <Routes>
           <Route path="/Home" element={<Home />} />
           <Route path="/Habits" element={<Habits />} />
