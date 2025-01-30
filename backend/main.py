@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
-from app.database import SessionLocal, engine
-from app.models import Base, HabitSchema, HabitStatus  # Import your models
-from app.schemas import CreateHabit, HabitStatus  # Import your Pydantic schemas
+from backend.database import SessionLocal, engine
+from backend.models import Base, HabitSchema, HabitStatus  # Import your models
+from backend.schemas import CreateHabit, HabitStatus  # Import your Pydantic schemas
 from datetime import date
 
 # Create tables in the database

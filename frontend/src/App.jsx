@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/layout/sidebar";
-import Home from "./components/pages/Home";
-import Habits from "./components/pages/Habits";
-import HabitClusters from "./components/pages/HabitClusters";
-import HabitStats from "./components/pages/HabitStats";
-import Account from "./components/pages/Account";
+import Home from "./pages/dashboard/Home";
+import Habits from "./pages/dashboard/habits";
+import HabitClusters from "./pages/dashboard/HabitClusters";
+import HabitStats from "./pages/dashboard/HabitStats";
+import Account from "./pages/dashboard/Account";
 
 const App = () => {
 
