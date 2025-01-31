@@ -12,7 +12,7 @@ const App = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 mx-3">
         <Routes>
           <Route path="/Home" element={<Home />} />
           <Route path="/Habits" element={<Habits />} />
