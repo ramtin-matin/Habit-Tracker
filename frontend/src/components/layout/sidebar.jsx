@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
-  const location = useLocation(); 
-  const [active, setActive] = useState(localStorage.getItem("activeMenu") || "Home");
+  const location = useLocation();
+  const [active, setActive] = useState(
+    localStorage.getItem("activeMenu") || "Home"
+  );
 
   const menuItem = [
-    { name: "Home", path: "/Home" }, 
-    { name: "Habits", path: "/Habits" }, 
-    { name: "Habit Clusters", path: "/Habit-Clusters" }, 
-    { name: "Habit Stats", path: "/Habit-Stats"}, 
+    { name: "Home", path: "/Home" },
+    { name: "Habits", path: "/Habits" },
+    { name: "Habit Clusters", path: "/Habit-Clusters" },
+    { name: "Habit Stats", path: "/Habit-Stats" },
     { name: "Account", path: "/Account" },
   ];
 
@@ -20,7 +22,9 @@ const Sidebar = () => {
 
   // Sync active state with the browser's URL (whenever a user navigates browser with back/forward button)
   useEffect(() => {
-    const currentMenu = menuItem.find(item => item.path === location.pathname);
+    const currentMenu = menuItem.find(
+      (item) => item.path === location.pathname
+    );
     if (currentMenu) {
       setActive(currentMenu.name);
     }
@@ -31,7 +35,7 @@ const Sidebar = () => {
       <div className="px-4 py-6">
         <Link to="/Home">
           <h1
-            className="text-4xl transition duration-300 ease-in-out cursor-pointer block px-6 py-8 font-bold text-white hover:scale-103 active:scale-99"
+            className="max-sm:text-2xl text-4xl transition duration-300 ease-in-out cursor-pointer block px-8 py-8 font-bold text-white hover:scale-103 active:scale-99"
             onClick={() => setActive("Home")}
           >
             HabitSet
@@ -43,9 +47,9 @@ const Sidebar = () => {
             <li key={item.name}>
               <Link to={item.path}>
                 <button
-                  className={`uppercase transition duration-150 ease-in-out text-base cursor-pointer w-full max-w-80 block hover:scale-101 active:scale-99 rounded-2xl px-4 py-4 font-bold ${
-                    active === item.name ? "bg-white text-emerald-600" : "text-white"
-                  }`}
+                  className={`max-sm:text-xs uppercase transition duration-150 ease-in-out text-base cursor-pointer w-full max-sm:max-w-40 max-w-80 
+                  block hover:scale-101 active:scale-99 rounded-2xl px-4 py-4 font-bold 
+                  ${active === item.name ? "bg-white text-emerald-600" : "text-white"}`}
                   onClick={() => setActive(item.name)}
                 >
                   {item.name}
