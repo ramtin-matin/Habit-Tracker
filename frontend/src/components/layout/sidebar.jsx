@@ -49,10 +49,10 @@ const Sidebar = () => {
       {/* ✅ Sidebar (Hidden on Mobile, Flex on Desktop) */}
       <div className="hidden md:flex h-screen flex-col justify-between bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))]">
         <div className="px-4 py-6">
-          <Link to="/Home">
+          <Link to="/Habits">
             <h1
               className="max-sm:text-2xl text-4xl transition duration-300 ease-in-out cursor-pointer block px-8 py-8 font-bold text-white hover:scale-103 active:scale-99"
-              onClick={() => setActive("Home")}
+              onClick={() => setActive("Habits")}
             >
               HabitSet
             </h1>
