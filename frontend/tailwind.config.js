@@ -6,8 +6,7 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-      }
+      colors: {},
     },
   },
   plugins: [],

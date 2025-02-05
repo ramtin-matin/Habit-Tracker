@@ -12,9 +12,23 @@ p {
 
 html,
 body {
+  background-color: rgb(246, 246, 246);
   height: 100%;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   overflow-y: hidden;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 1px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(69, 169, 119, 0.67);
+  border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(77, 189, 133, 0.67);
 }

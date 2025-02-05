@@ -8,7 +8,6 @@ const Sidebar = () => {
   );
 
   const menuItem = [
-    { name: "Home", path: "/Home" },
     { name: "Habits", path: "/Habits" },
     { name: "Habit Clusters", path: "/Habit-Clusters" },
     { name: "Habit Stats", path: "/Habit-Stats" },
