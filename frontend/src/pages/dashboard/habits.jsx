@@ -56,15 +56,21 @@ const Habits = () => {
     );
   };
 
+  const editHabit = (habitId, updatedHabit) => {
+    setHabits((prevHabits) =>
+      prevHabits.map((habit) =>
+        habit.id === habitId ? { ...habit, text: updatedHabit } : habit
+      )
+    );
+  };
+
   const addHabit = (newHabit) => {
     setHabits((prev) => [...prev, newHabit]);
   };
 
   const deleteHabit = (habitId) => {
     setHabits((prevHabits) =>
-      prevHabits
-        .filter((habit) => habit.id !== habitId)
-        .map((habit, index) => ({ ...habit, id: index + 1 }))
+      prevHabits.filter((habit) => habit.id !== habitId)
     );
     console.log("deleting: ", habitId);
   };
@@ -83,12 +89,13 @@ const Habits = () => {
         <b className="text-emerald-600/75">consistent.</b>
       </p>
       <div className=" border-1 border-gray-200 bg-white flex items-center h-[8vh] max-sm:px-2 px-4 mt-4 rounded-sm"></div>
-      <div className="max-w-150 bg-white w-full overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[80vh] p-5 mt-3 rounded-sm">
+      <div className="max-w-150 bg-white w-full overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
         <CreateHabit habits={habits} addHabit={addHabit} />
         <HabitCard
           habits={habits}
           onDelete={deleteHabit}
           habitCompleted={toggleHabitChecked}
+          onEdit={editHabit}
         />
       </div>
     </div>

@@ -34,7 +34,7 @@ const Sidebar = () => {
   return (
     <>
       {/* ✅ Mobile Navbar (Shows Only on Small Screens) */}
-      <div className="bg-emerald-500 md:hidden flex-col h-screen px-3 py-4 shadow">
+      <div className="bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))] md:hidden flex-col h-screen px-3 py-4 shadow">
         <h1 className="text-sm font-bold text-white">HabitSet</h1>
         <button onClick={() => setIsMobileOpen(!isMobileOpen)}>
           {isMobileOpen ? (
@@ -79,11 +79,11 @@ const Sidebar = () => {
 
       {/* ✅ Mobile Dropdown Menu (Opens When Clicking ☰) */}
       <div
-        className={`fixed top-0 left-0 w-[30vh] h-screen rounded-lg bg-emerald-500 shadow-sm md:hidden z-20 
+        className={`fixed top-0 left-0 w-[30vh] h-screen rounded-lg bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))] shadow-sm md:hidden z-20 
           transform transition-all duration-300 ease-in-out
           ${isMobileOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"}`}
       >
-        <div className="absolute flex-col top-0 left-0 w-[30vh] h-screen rounded-lg bg-emerald-500 shadow-sm md:hidden z-20">
+        <div className="absolute flex-col top-0 left-0 w-[30vh] h-screen rounded-lg bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))] shadow-sm md:hidden z-20">
           <h1 className="text-sm font-bold p-3 text-white">HabitSet</h1>
           <button
             onClick={() => setIsMobileOpen(false)}
