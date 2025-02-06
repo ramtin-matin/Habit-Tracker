@@ -80,7 +80,11 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
             )}
             {editMenu === habit.id && (
               <div className="fixed inset-1 flex items-center justify-center bg-gray-100/55 z-20">
-                <div className="flex justify-between gap-2 w-120 h-80 flex-col absolute mt-12 p-3 sm:p-4 border border-gray-200 bg-white shadow-xs rounded-md">
+                <div
+                  className="flex flex-col justify-between gap-2 
+                  w-[80%] sm:w-[55%] md:w-[40%] h-80
+                  p-4 border border-gray-200 bg-white shadow-md rounded-md"
+                >
                   <h1 className="font-bold text-2xl text-emerald-600/75">
                     Edit Habit
                   </h1>
@@ -100,7 +104,7 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
                         setEditMenu(null);
                         setThreeDotMenu(null);
                       }}
-                      className="font-bold w-1/5 text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 cursor-pointer"
+                      className="font-bold w-[25%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -111,7 +115,7 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
                         setThreeDotMenu(null);
                         setEditMenu(null);
                       }}
-                      className="font-bold w-1/5 text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-emerald-600/75 hover:bg-emerald-600/80 active:bg-emerald-600/85 cursor-pointer"
+                      className="font-bold w-[25%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-emerald-600/75 hover:bg-emerald-600/80 active:bg-emerald-600/85 cursor-pointer"
                     >
                       Edit
                     </button>

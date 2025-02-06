@@ -5,57 +5,74 @@ import HabitCard from "../../components/ui/habits/HabitCard";
 const Habits = () => {
   const [habits, setHabits] = useState([
     {
-      id: 1,
+      id: crypto.randomUUID(),
       name: "work out",
       cluster: "Health",
       color: "bg-blue-500/50",
       completed: false,
+      completedOn: null,
     },
     {
-      id: 2,
+      id: crypto.randomUUID(),
       name: "read",
       cluster: "Exercise",
       color: "bg-red-500/50",
       completed: false,
+      completedOn: null,
     },
     {
-      id: 3,
+      id: crypto.randomUUID(),
       name: "drink water",
       cluster: "After work",
       color: "bg-pink-500/50",
       completed: false,
+      completedOn: null,
     },
     {
-      id: 4,
+      id: crypto.randomUUID(),
       name: "homework",
       cluster: "Morning",
       color: "bg-purple-500/50",
       completed: false,
+      completedOn: null,
     },
     {
-      id: 5,
+      id: crypto.randomUUID(),
       name: "walk",
       cluster: "Evening",
       color: "bg-emerald-500/50",
       completed: false,
+      completedOn: null,
     },
     {
-      id: 6,
+      id: crypto.randomUUID(),
       name: "journal",
       cluster: "Night",
       color: "bg-yellow-500/50",
       completed: false,
+      completedOn: null,
     },
   ]);
 
+  // checks off habit and gets date when habit got completed
   const toggleHabitChecked = (habitId) => {
+    console.log("habit id: ", habitId);
     setHabits((prevHabits) =>
       prevHabits.map((habit) =>
-        habit.id === habitId ? { ...habit, completed: !habit.completed } : habit
+        habit.id === habitId
+          ? {
+              ...habit,
+              completed: !habit.completed,
+              completedOn: !habit.completed
+                ? new Date().toISOString().slice(0, 10) // to get date in (0000-00-00) format
+                : null,
+            }
+          : habit
       )
     );
   };
 
+  // edit the habit name
   const editHabit = (habitId, updatedHabit) => {
     setHabits((prevHabits) =>
       prevHabits.map((habit) =>
@@ -64,8 +81,9 @@ const Habits = () => {
     );
   };
 
+  // add habit as first
   const addHabit = (newHabit) => {
-    setHabits((prev) => [...prev, newHabit]);
+    setHabits((prev) => [newHabit, ...prev]);
   };
 
   const deleteHabit = (habitId) => {
