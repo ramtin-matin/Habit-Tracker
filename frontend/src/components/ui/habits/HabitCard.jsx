@@ -3,7 +3,7 @@ import { FiMoreVertical } from "react-icons/fi";
 
 const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
   const [threeDotMenu, setThreeDotMenu] = useState(null);
-  const [editMenu, setEditMenu] = useState(false);
+  const [editMenu, setEditMenu] = useState(null);
   const [updatedHabit, setUpdatedHabit] = useState("");
 
   const handleEdit = (habitId) => {
@@ -14,8 +14,6 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
     console.log("new name: ", updatedHabit);
 
     setUpdatedHabit("");
-    setThreeDotMenu(null);
-    setEditMenu(false);
   };
 
   return (
@@ -36,7 +34,7 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
 
           {/* Habit Name */}
           <p className="max-sm:text-xs font-bold text-gray-500 absolute ml-10">
-            {habit.text}
+            {habit.name}
           </p>
 
           {/* Habit Cluster */}
@@ -49,7 +47,9 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
           {/* Three-Dot Menu */}
           <div className="relative">
             <button
-              onClick={() => setThreeDotMenu(habit.id)}
+              onClick={() =>
+                setThreeDotMenu((prev) => (prev === habit.id ? null : habit.id))
+              }
               className="p-2 rounded-full transition duration-200 ease-in-out hover:bg-gray-100"
             >
               <FiMoreVertical size={18} />
@@ -57,48 +57,16 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
 
             {/* Dropdown Menu */}
             {threeDotMenu === habit.id && (
-              <div className="fixed p-2 ml-2 mt-2 w-24 bg-white border border-gray-200 shadow-md rounded-md z-10">
+              <div className="absolute bottom-10 right-0 p-1 w-22 bg-white border-1 border-gray-200 shadow-md rounded-md z-10">
                 <button
-                  onClick={() => setEditMenu(true)}
+                  onClick={() => {
+                    setEditMenu(habit.id);
+                    setThreeDotMenu(null);
+                  }}
                   className="text-sm block w-full px-4 py-2 text-left hover:bg-gray-100 hover:rounded-lg transition duration-150 ease-in"
                 >
                   Edit
                 </button>
-                {editMenu && (
-                  <div className="fixed inset-1 flex items-center justify-center bg-gray-100/55 z-10">
-                    <div className="flex flex-col gap-2 absolute mt-12 p-4 sm:p-8 border border-gray-300 bg-white shadow-md rounded-md">
-                      <label className="text-sm ml-5 text-gray-500">
-                        Edit Habit
-                      </label>
-                      <input
-                        className="border-1 rounded-md border-gray-200 p-1 m-auto"
-                        type="text"
-                        value={updatedHabit || ""}
-                        onChange={(e) => setUpdatedHabit(e.target.value)}
-                      />
-
-                      <button
-                        onClick={() => {
-                          console.log("old habit name: ", habit.text),
-                            handleEdit(habit.id);
-                        }}
-                        className="mt-2 w-1/2 text-xs sm:text-sm p-2 m-auto border rounded-lg shadow-sm border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition duration-150 ease-in cursor-pointer"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => {
-                          setUpdatedHabit("");
-                          setEditMenu(false);
-                          setThreeDotMenu(null);
-                        }}
-                        className="mt-2 w-1/2 text-xs sm:text-sm p-2 m-auto border rounded-lg shadow-sm border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition duration-150 ease-in cursor-pointer"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
                 <button
                   onClick={() => {
                     onDelete(habit.id);
@@ -108,6 +76,47 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
                 >
                   Delete
                 </button>
+              </div>
+            )}
+            {editMenu === habit.id && (
+              <div className="fixed inset-1 flex items-center justify-center bg-gray-100/55 z-20">
+                <div className="flex justify-between gap-2 w-120 h-80 flex-col absolute mt-12 p-3 sm:p-4 border border-gray-200 bg-white shadow-xs rounded-md">
+                  <h1 className="font-bold text-2xl text-emerald-600/75">
+                    Edit Habit
+                  </h1>
+                  <div className="flex flex-col">
+                    <label className="ml-2 text-gray-500 font-bold">Name</label>
+                    <input
+                      className="border-1 mb-30 mt-1 rounded-md border-gray-300 p-1"
+                      type="text"
+                      value={updatedHabit || ""}
+                      onChange={(e) => setUpdatedHabit(e.target.value)}
+                    />
+                  </div>
+                  <div className="justify-end flex gap-2">
+                    <button
+                      onClick={() => {
+                        setUpdatedHabit("");
+                        setEditMenu(null);
+                        setThreeDotMenu(null);
+                      }}
+                      className="font-bold w-1/5 text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => {
+                        console.log("old habit name: ", habit.name),
+                          handleEdit(habit.id);
+                        setThreeDotMenu(null);
+                        setEditMenu(null);
+                      }}
+                      className="font-bold w-1/5 text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-emerald-600/75 hover:bg-emerald-600/80 active:bg-emerald-600/85 cursor-pointer"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
           </div>

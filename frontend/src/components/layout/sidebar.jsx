@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FiMenu, FiX } from "react-icons/fi"; // ✅ Icons for mobile menu
+import { FiMenu, FiX } from "react-icons/fi"; //  Icons for mobile menu
 
 const Sidebar = () => {
   const location = useLocation();
   const [active, setActive] = useState(
     localStorage.getItem("activeMenu") || "Home"
   );
-  const [isMobileOpen, setIsMobileOpen] = useState(false); // ✅ Mobile menu toggle
+  const [isMobileOpen, setIsMobileOpen] = useState(false); // Mobile menu toggle
 
   const menuItem = [
     { name: "Habits", path: "/Habits" },
@@ -33,7 +33,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* ✅ Mobile Navbar (Shows Only on Small Screens) */}
+      {/*  Mobile Navbar (Shows Only on Small Screens) */}
       <div className="bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))] md:hidden flex-col h-screen px-3 py-4 shadow">
         <h1 className="text-sm font-bold text-white">HabitSet</h1>
         <button onClick={() => setIsMobileOpen(!isMobileOpen)}>
@@ -46,7 +46,7 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* ✅ Sidebar (Hidden on Mobile, Flex on Desktop) */}
+      {/* Sidebar (Hidden on Mobile, Flex on Desktop) */}
       <div className="hidden md:flex h-screen flex-col justify-between bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))]">
         <div className="px-4 py-6">
           <Link to="/Habits">
@@ -77,7 +77,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* ✅ Mobile Dropdown Menu (Opens When Clicking ☰) */}
+      {/* Mobile Dropdown Menu (Opens When Clicking ☰) */}
       <div
         className={`fixed top-0 left-0 w-[30vh] h-screen rounded-lg bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))] shadow-sm md:hidden z-20 
           transform transition-all duration-300 ease-in-out
@@ -101,7 +101,7 @@ const Sidebar = () => {
                       ${active === item.name ? "bg-white text-emerald-600 shadow-md" : "text-white"}`}
                     onClick={() => {
                       setActive(item.name);
-                      setIsMobileOpen(false); // ✅ Close menu when clicking
+                      setIsMobileOpen(false); // Close menu when clicking
                     }}
                   >
                     {item.name}
