@@ -24,106 +24,93 @@ const App = () => {
 
   const defaultColor = clusterColors[0].hex;
 
+  const [clusters, setClusters] = useState([
+    {
+      id: crypto.randomUUID(),
+      name: "General",
+      color: defaultColor,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Health",
+      color: clusterColors[1].hex,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Exercise",
+      color: clusterColors[2].hex,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Morning",
+      color: clusterColors[3].hex,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Afternoon",
+      color: clusterColors[4].hex,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Evening",
+      color: clusterColors[5].hex,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Night",
+      color: clusterColors[6].hex,
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "After Work",
+      color: clusterColors[7].hex,
+    },
+  ]);
+
   const [habits, setHabits] = useState([
     {
       id: crypto.randomUUID(),
       name: "work out",
-      clusterId: 1,
+      clusterId: clusters[0].id,
       completed: false,
       completedOn: null,
     },
     {
       id: crypto.randomUUID(),
       name: "read",
-      clusterId: 2,
+      clusterId: clusters[1].id,
       completed: false,
       completedOn: null,
     },
     {
       id: crypto.randomUUID(),
       name: "drink water",
-      clusterId: 3,
+      clusterId: clusters[2].id,
       completed: false,
       completedOn: null,
     },
     {
       id: crypto.randomUUID(),
       name: "homework",
-      clusterId: 4,
+      clusterId: clusters[3].id,
       completed: false,
       completedOn: null,
     },
     {
       id: crypto.randomUUID(),
       name: "walk",
-      clusterId: 5,
+      clusterId: clusters[4].id,
       completed: false,
       completedOn: null,
     },
     {
       id: crypto.randomUUID(),
       name: "journal",
-      clusterId: 6,
+      clusterId: clusters[5].id,
       completed: false,
       completedOn: null,
     },
   ]);
-
-  const [clusters, setClusters] = useState(
-    [
-      {
-        id: crypto.randomUUID(),
-        name: "General",
-        color: defaultColor,
-        habits: [],
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "Health",
-        color: clusterColors[1].hex,
-        habits: [],
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "Exercise",
-        color: clusterColors[2].hex,
-        habits: [],
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "Morning",
-        color: clusterColors[3].hex,
-        habits: [],
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "Afternoon",
-        color: clusterColors[4].hex,
-        habits: [],
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "Evening",
-        color: clusterColors[5].hex,
-        habits: [],
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "Night",
-        color: clusterColors[6].hex,
-        habits: [],
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "After Work",
-        color: clusterColors[7].hex,
-        habits: [],
-      },
-    ].map((cluster) => ({
-      ...cluster,
-      habits: habits.filter((habit) => habit.clusterId === cluster.id), // Automatically assign habits
-    }))
-  );
 
   return (
     <div className="flex">

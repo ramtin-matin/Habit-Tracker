@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import CreateCluster from "./CreateCluster";
+import HabitCard from "/Users/ramtinmatin/habittracker/frontend/src/pages/habits/HabitCard.jsx";
 
 const HabitClusters = ({
   habits,
@@ -10,9 +11,10 @@ const HabitClusters = ({
   defaultColor,
 }) => {
   const [activeCluster, setActiveCluster] = useState(clusters[0].name);
+  const [clusterMenu, setClusterMenu] = useState(false);
 
   const addCluster = (newCluster) => {
-    setClusters((prevClusters) => [newCluster, ...prevClusters]);
+    setClusters((prevClusters) => [...prevClusters, newCluster]);
   };
 
   return (
@@ -36,9 +38,31 @@ const HabitClusters = ({
         />
       </div>
       <div className="bg-white w-full overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
-        <button className="p-2 border rounded-lg border-gray-300/75">
+        <button
+          className="p-3 text-emerald-600/75 hover:text-emerald-700 cursor-pointer border rounded-lg border-emerald-600/75 transition duration-100 ease-in active:bg-gray-50"
+          onClick={() => setClusterMenu(!clusterMenu)}
+        >
           {activeCluster}
         </button>
+        {clusterMenu && (
+          <div className="p-3 absolute mt-3 bg-white border border-emerald-600/75 rounded-md shadow-lg">
+            <h1 className="text-emerald-600/75 font-bold ">Clusters</h1>
+            <div className="grid grid-cols-2 gap-4 mt-5">
+              {clusters.map((cluster) => (
+                <button
+                  key={cluster.id}
+                  className="cursor-pointer transition duration-100 ease-in hover:text-emerald-600/75 font-bold rounded-md text-center text-gray-600/75 "
+                  onClick={() => {
+                    setActiveCluster(cluster.name);
+                    setClusterMenu(false);
+                  }}
+                >
+                  {cluster.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
