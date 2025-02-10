@@ -23,10 +23,10 @@ const CreateHabit = ({ habits, addHabit }) => {
   };
 
   return (
-    <ul className="mt-2.5 flex gap-2">
+    <ul className="flex gap-2">
       <button
         onClick={() => setCreateHabitModal(true)}
-        className="relative flex justify-center gap-4 text-sm p-2 font-bold cursor-pointer md:shrink-0 rounded-lg active:scale-99 text-gray-500 hover:shadow-sm hover:bg-gray-50 border-1 border-gray-300"
+        className="relative flex justify-center gap-4 text-sm p-2 font-bold cursor-pointer rounded-lg active:scale-99 text-white hover:shadow-sm hover:bg-emerald-600/80 bg-emerald-600/75 border-1 border-gray-300"
       >
         <FaPlus className="m-auto text-xs" />
         <span className="hidden sm:inline">Create</span>
@@ -42,10 +42,11 @@ const CreateHabit = ({ habits, addHabit }) => {
             <h1 className="font-bold text-2xl text-emerald-600/75">
               Create Habit
             </h1>
-            <div className="flex flex-col">
+
+            <div className="flex place-items-start flex-col">
               <label className="ml-2 text-gray-500 font-bold">Habit</label>
               <input
-                className="border-1 mb-30 mt-1 rounded-md border-gray-300 p-1"
+                className="border-1 mb- h-10 mt-1 rounded-md border-gray-300 p-1"
                 type="text"
                 value={newHabit || ""}
                 onChange={(e) => setNewHabit(e.target.value)}

@@ -70,6 +70,7 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
                 <button
                   onClick={() => {
                     onDelete(habit.id);
+                    console.log("Habit that got deleted: ", habit.name);
                     setThreeDotMenu(null);
                   }}
                   className="text-sm block w-full px-4 py-2 text-left text-red-500  hover:rounded-lg hover:bg-gray-100 transition duration-150 ease-in"
