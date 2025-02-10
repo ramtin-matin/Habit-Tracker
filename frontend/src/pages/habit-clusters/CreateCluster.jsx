@@ -9,11 +9,36 @@ const CreateCluster = ({
   clusters,
   setClusters,
   defaultColor,
+  addCluster,
 }) => {
   const [createClusterModal, setCreateClustertModal] = useState(false);
   const [colorMenu, setColorMenu] = useState(false);
   const [newCluster, setNewCluster] = useState("");
   const [pickedColor, setPickedColor] = useState(defaultColor);
+
+  const handleAddCluster = () => {
+    if (!newCluster.trim()) return;
+
+    const clusterExists = clusters.some(
+      (cluster) => cluster.name === newCluster
+    );
+    if (clusterExists) {
+      alert("Cluster name already exists");
+      return;
+    }
+    const newItem = {
+      id: crypto.randomUUID(),
+      name: newCluster,
+      color: pickedColor,
+      habits: [],
+    };
+    addCluster(newItem);
+    console.log("new cluster: ", newCluster);
+    setNewCluster("");
+    console.log("Number of clusters: ", clusters.length + 1);
+    console.log(clusters);
+    setCreateClustertModal(false);
+  };
 
   return (
     <ul className="flex gap-2">
@@ -53,19 +78,20 @@ const CreateCluster = ({
                   style={{ backgroundColor: pickedColor }}
                 ></div>
                 {colorMenu && (
-                  <div className="p-2 grid grid-cols-3 gap-1 absolute mt-3 w-32 bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div className="cursor-default p-2 grid grid-cols-3 gap-4 absolute mt-3 w-46 bg-white border border-gray-300 rounded-md shadow-lg">
                     {clusterColors.map((color) => (
                       <div
                         key={color.name}
-                        className="w-8 h-8 p-2 border border-gray-200 rounded-lg active:scale-95 hover:scale-103 hover:bg-gray-100/75"
+                        className="w-10 h-10 border flex justify-center cursor-pointer items-center border-gray-200 rounded-lg active:scale-95 hover:scale-103 hover:bg-gray-100/75"
+                        onClick={() => {
+                          setPickedColor(color.hex),
+                            console.log("picked color: ", color);
+                          setColorMenu(false);
+                        }}
                       >
                         <div
-                          className="w-4 h-4 rounded-md"
+                          className="w-8 h-8 rounded-md"
                           style={{ backgroundColor: color.hex }}
-                          onClick={() => {
-                            setPickedColor(color.hex),
-                              console.log("picked color: ", color);
-                          }}
                         ></div>
                       </div>
                     ))}
@@ -80,6 +106,7 @@ const CreateCluster = ({
                   setCreateClustertModal(false);
                   setColorMenu(false);
                   setPickedColor(defaultColor);
+                  setNewCluster("");
                 }}
                 className="font-bold w-[25%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 cursor-pointer"
               >
@@ -87,9 +114,9 @@ const CreateCluster = ({
               </button>
               <button
                 onClick={() => {
-                  setCreateClustertModal(false);
                   setColorMenu(false);
                   setPickedColor(defaultColor);
+                  handleAddCluster();
                 }}
                 className="font-bold w-[25%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-emerald-600/75 hover:bg-emerald-600/80 active:bg-emerald-600/85 cursor-pointer"
               >

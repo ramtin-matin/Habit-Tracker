@@ -8,6 +8,12 @@ const CreateHabit = ({ habits, addHabit }) => {
 
   const handleAddHabit = () => {
     if (!newHabit.trim()) return;
+
+    const habitExists = habits.some((habit) => habit.name === newHabit);
+    if (habitExists) {
+      alert("Habit name already exists");
+      return;
+    }
     const newItem = {
       id: crypto.randomUUID(),
       name: newHabit,
@@ -20,6 +26,7 @@ const CreateHabit = ({ habits, addHabit }) => {
     console.log("new habit: ", newHabit);
     setNewHabit("");
     console.log("Number of habits: ", habits.length + 1);
+    setCreateHabitModal(false);
   };
 
   return (
@@ -54,7 +61,10 @@ const CreateHabit = ({ habits, addHabit }) => {
             </div>
             <div className="justify-end flex gap-2">
               <button
-                onClick={() => setCreateHabitModal(false)}
+                onClick={() => {
+                  setCreateHabitModal(false);
+                  setNewHabit("");
+                }}
                 className="font-bold w-[25%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 cursor-pointer"
               >
                 Cancel
@@ -62,7 +72,7 @@ const CreateHabit = ({ habits, addHabit }) => {
               <button
                 onClick={() => {
                   handleAddHabit();
-                  setCreateHabitModal(false);
+                  setNewHabit("");
                 }}
                 className="font-bold w-[25%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-emerald-600/75 hover:bg-emerald-600/80 active:bg-emerald-600/85 cursor-pointer"
               >
