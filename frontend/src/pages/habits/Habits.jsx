@@ -1,8 +1,11 @@
 import React from "react";
 import CreateHabit from "./CreateHabit";
 import HabitCard from "./HabitCard";
+import { useHabits } from "../../pages/HabitContext";
 
 const Habits = () => {
+  const { habits } = useHabits();
+
   return (
     <div className="max-w-8xl h-full rounded-lg mx-auto p-2">
       <h1 className="md:shrink-0 text-5xl max-sm:text-4xl m-1 mb-2 font-bold text-emerald-600/75">
@@ -17,7 +20,9 @@ const Habits = () => {
       </div>
       <div className="max-w-95 md:max-w-110 bg-white w-full overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
         <div className="mt-15">
-          <HabitCard />
+          {habits.map((habit) => (
+            <HabitCard key={habit.id} habit={habit} />
+          ))}
         </div>
       </div>
     </div>

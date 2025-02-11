@@ -56,8 +56,8 @@ const CreateCluster = () => {
               Create Cluster
             </h1>
 
-            <div className="flex flex-row gap-2">
-              <label className="ml-2 text-gray-500 text-sm">Name</label>
+            <div className="flex flex-row gap-3">
+              <label className="ml-2 text-gray-500 font-bold">Name</label>
               <input
                 className="border-1 mb- w-1/2 h-8 rounded-md border-gray-300 p-1"
                 type="text"
