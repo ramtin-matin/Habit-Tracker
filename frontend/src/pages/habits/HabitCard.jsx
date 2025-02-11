@@ -1,14 +1,17 @@
 import { React, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
+import { useHabits } from "../../pages/HabitContext";
 
-const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
+const HabitCard = ({}) => {
+  const { habits, toggleHabitChecked, editHabit, deleteHabit } = useHabits();
+
   const [threeDotMenu, setThreeDotMenu] = useState(null);
   const [editMenu, setEditMenu] = useState(null);
   const [updatedHabit, setUpdatedHabit] = useState("");
 
   const handleEdit = (habitId) => {
     if (!updatedHabit.trim()) return;
-    onEdit(habitId, updatedHabit);
+    editHabit(habitId, updatedHabit);
 
     console.log("editted habit id: ", habitId);
     console.log("new name: ", updatedHabit);
@@ -29,7 +32,7 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
             className="accent-emerald-600/75 w-7 h-8 cursor-pointer"
             name="habit-checkbox"
             checked={habit.completed}
-            onChange={() => habitCompleted(habit.id)}
+            onChange={() => toggleHabitChecked(habit.id)}
           />
 
           {/* Habit Name */}
@@ -69,7 +72,7 @@ const HabitCard = ({ habits, onDelete, habitCompleted, onEdit }) => {
                 </button>
                 <button
                   onClick={() => {
-                    onDelete(habit.id);
+                    deleteHabit(habit.id);
                     console.log("Habit that got deleted: ", habit.name);
                     setThreeDotMenu(null);
                   }}

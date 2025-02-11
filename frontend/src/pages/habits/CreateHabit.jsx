@@ -1,8 +1,11 @@
 import { React, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { FaPlus } from "react-icons/fa";
+import { useHabits } from "../../pages/HabitContext";
 
-const CreateHabit = ({ habits, addHabit }) => {
+const CreateHabit = () => {
+  const { habits, addHabit } = useHabits();
+
   const [createHabitModal, setCreateHabitModal] = useState(false);
   const [newHabit, setNewHabit] = useState("");
 

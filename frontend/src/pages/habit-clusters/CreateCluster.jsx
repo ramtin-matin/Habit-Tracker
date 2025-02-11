@@ -1,16 +1,11 @@
 import { React, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { FaPlus } from "react-icons/fa";
+import { useHabits } from "../../pages/HabitContext";
 
-const CreateCluster = ({
-  habits,
-  setHabits,
-  clusterColors,
-  clusters,
-  setClusters,
-  defaultColor,
-  addCluster,
-}) => {
+const CreateCluster = () => {
+  const { clusterColors, clusters, defaultColor, addCluster } = useHabits();
+
   const [createClusterModal, setCreateClustertModal] = useState(false);
   const [colorMenu, setColorMenu] = useState(false);
   const [newCluster, setNewCluster] = useState("");
