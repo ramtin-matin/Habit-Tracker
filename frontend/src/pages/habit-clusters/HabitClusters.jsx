@@ -14,14 +14,13 @@ const HabitClusters = () => {
     setPickedColor,
     clusterColors,
     editCluster,
+    deleteCluster,
+    activeCluster,
+    setActiveCluster,
   } = useHabits();
 
   const [editMenu, setEditMenu] = useState(false);
   const [clusterMenu, setClusterMenu] = useState(false);
-  const [activeCluster, setActiveCluster] = useState({
-    id: clusters[0]?.id,
-    name: clusters[0]?.name,
-  });
   const [edittedCluster, setEdittedCluster] = useState("");
 
   const handleEditCluster = (clusterId, newColor) => {
@@ -157,6 +156,7 @@ const HabitClusters = () => {
                       setEditMenu(false);
                       setColorMenu(false);
                       setPickedColor(defaultColor);
+                      deleteCluster(activeCluster.id);
                     }}
                     className="font-bold w-[20%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-red-500/90 hover:bg-red-500/95 active:bg-red-500 cursor-pointer absolute left-0 "
                   >

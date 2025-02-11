@@ -146,6 +146,26 @@ export const HabitProvider = ({ children }) => {
     console.log("deleting ID: ", habitId);
   };
 
+  const deleteCluster = (clusterId) => {
+    setClusters((prevClusters) => {
+      const updatedClusters = prevClusters.filter(
+        (cluster) => cluster.id !== clusterId
+      );
+
+      const nextCluster =
+        updatedClusters.length > 0 ? updatedClusters[0] : null;
+
+      if (nextCluster) {
+        setActiveCluster({ id: nextCluster.id, name: nextCluster.name });
+      } else {
+        setActiveCluster(null);
+      }
+
+      console.log("deleting cluster ID: ", clusterId);
+      return updatedClusters;
+    });
+  };
+
   const addCluster = (newCluster) => {
     setClusters((prevClusters) => [...prevClusters, newCluster]);
   };
@@ -168,6 +188,11 @@ export const HabitProvider = ({ children }) => {
   const [colorMenu, setColorMenu] = useState(false);
   const [pickedColor, setPickedColor] = useState(defaultColor);
 
+  const [activeCluster, setActiveCluster] = useState({
+    id: clusters[0]?.id,
+    name: clusters[0]?.name,
+  });
+
   return (
     <HabitContext.Provider
       value={{
@@ -187,6 +212,9 @@ export const HabitProvider = ({ children }) => {
         pickedColor,
         setPickedColor,
         editCluster,
+        deleteCluster,
+        activeCluster,
+        setActiveCluster,
       }}
     >
       {children}
