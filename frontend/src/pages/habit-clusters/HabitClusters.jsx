@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { act, useState } from "react";
 import CreateCluster from "./CreateCluster";
 import { useHabits } from "../../pages/HabitContext";
 import HabitCard from "../habits/HabitCard";
@@ -17,6 +17,7 @@ const HabitClusters = () => {
     deleteCluster,
     activeCluster,
     setActiveCluster,
+    defaultCluster,
   } = useHabits();
 
   const [editMenu, setEditMenu] = useState(false);
@@ -42,9 +43,8 @@ const HabitClusters = () => {
     console.log("new name: ", edittedCluster);
 
     setActiveCluster({ id: clusterId, name: updatedName });
-
-    setEdittedCluster("");
     setEditMenu(false);
+    setEdittedCluster("");
   };
 
   return (
@@ -153,6 +153,10 @@ const HabitClusters = () => {
                 <div className="relative justify-end flex gap-2">
                   <button
                     onClick={() => {
+                      if (activeCluster.id === defaultCluster) {
+                        alert("Can't delete General Cluster");
+                        return;
+                      }
                       setEditMenu(false);
                       setColorMenu(false);
                       setPickedColor(defaultColor);
@@ -174,6 +178,10 @@ const HabitClusters = () => {
                   </button>
                   <button
                     onClick={() => {
+                      if (activeCluster.id === defaultCluster) {
+                        alert("Can't edit General Cluster");
+                        return;
+                      }
                       setEditMenu(false);
                       setColorMenu(false);
                       setPickedColor(defaultColor);

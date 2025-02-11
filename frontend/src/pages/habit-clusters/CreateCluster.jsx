@@ -35,10 +35,12 @@ const CreateCluster = () => {
       habits: [],
     };
     addCluster(newItem);
+
     console.log("new cluster: ", newCluster);
-    setNewCluster("");
     console.log("Number of clusters: ", clusters.length + 1);
     console.log(clusters);
+
+    setNewCluster("");
     setCreateClustertModal(false);
   };
 

@@ -62,6 +62,8 @@ export const HabitProvider = ({ children }) => {
     },
   ]);
 
+  const defaultCluster = clusters[0].id;
+
   const [habits, setHabits] = useState([
     {
       id: crypto.randomUUID(),
@@ -147,6 +149,14 @@ export const HabitProvider = ({ children }) => {
   };
 
   const deleteCluster = (clusterId) => {
+    setHabits((prevHabits) =>
+      prevHabits.map((habit) =>
+        habit.clusterId === clusterId
+          ? { ...habit, clusterId: defaultCluster }
+          : habit
+      )
+    );
+
     setClusters((prevClusters) => {
       const updatedClusters = prevClusters.filter(
         (cluster) => cluster.id !== clusterId
@@ -215,6 +225,7 @@ export const HabitProvider = ({ children }) => {
         deleteCluster,
         activeCluster,
         setActiveCluster,
+        defaultCluster,
       }}
     >
       {children}
