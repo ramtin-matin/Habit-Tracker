@@ -103,7 +103,7 @@ const CreateHabit = () => {
               </div>
             </div>
             <div
-              className="w-1/3 h-2 rounded-md"
+              className="w-full h-0.5 mb-10 rounded-md"
               style={{ backgroundColor: activeCluster.color }}
             ></div>
             <div className="justify-end flex gap-2">
