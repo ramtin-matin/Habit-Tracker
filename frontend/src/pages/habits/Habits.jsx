@@ -34,7 +34,7 @@ const Habits = () => {
       </div>
       <div className="max-w-95 md:max-w-110 bg-white w-full overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
         <div className="mt-3">
-          <div className="flex gap-2">
+          <div className="flex gap-2 ">
             <button
               className="relative flex justify-center gap-4 text-sm p-2 font-bold cursor-pointer rounded-lg active:scale-99 text-emerald-600/75 hover:shadow-sm bg-white border-1 border-gray-300"
               onClick={() => setFilterMenu(!filterMenu)}
@@ -44,10 +44,10 @@ const Habits = () => {
             </button>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="border rounded-md p-2 w-1/3 font-bold text-xs border-emerald-600/75 text-emerald-600/75"
+              className="border rounded-md p-2 w-40  font-bold text-xs border-gray-300 hover:shadow-sm text-gray-600"
             ></input>
           </div>
           <div className="relative">

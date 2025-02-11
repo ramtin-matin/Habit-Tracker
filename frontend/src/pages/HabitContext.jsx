@@ -150,6 +150,24 @@ export const HabitProvider = ({ children }) => {
     setClusters((prevClusters) => [...prevClusters, newCluster]);
   };
 
+  const editCluster = (clusterId, newColor, edittedCluster) => {
+    setClusters((prevClusters) =>
+      prevClusters.map((cluster) =>
+        cluster.id === clusterId
+          ? {
+              ...cluster,
+              color: newColor !== cluster.color ? newColor : cluster.color,
+              name:
+                edittedCluster !== cluster.name ? edittedCluster : cluster.name,
+            }
+          : cluster
+      )
+    );
+  };
+
+  const [colorMenu, setColorMenu] = useState(false);
+  const [pickedColor, setPickedColor] = useState(defaultColor);
+
   return (
     <HabitContext.Provider
       value={{
@@ -164,6 +182,11 @@ export const HabitProvider = ({ children }) => {
         addHabit,
         deleteHabit,
         addCluster,
+        colorMenu,
+        setColorMenu,
+        pickedColor,
+        setPickedColor,
+        editCluster,
       }}
     >
       {children}

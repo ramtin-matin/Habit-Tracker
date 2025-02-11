@@ -60,18 +60,22 @@ const CreateHabit = () => {
               Create Habit
             </h1>
 
-            <label className="ml-2 text-gray-500 font-bold">Habit</label>
-            <div className="flex gap-3 flex-row">
+            <div
+              className="w-full h-0.5 rounded-md"
+              style={{ backgroundColor: activeCluster.color }}
+            ></div>
+            <div className="flex gap-3 flex-row m-auto">
+              <label className="ml-2 text-gray-500 font-bold">Habit</label>
               <input
                 type="text"
-                className="border-1 mb- w-1/3 h-6 rounded-md border-gray-300 p-1"
+                className="border-1 h-6 rounded-md border-gray-300 p-1"
                 value={newHabit || ""}
                 onChange={(e) => setNewHabit(e.target.value)}
               />
               <div className="relative">
                 <div>
                   <button
-                    className="p-1 text-sm text-emerald-600/75 cursor-pointer bg-$ border rounded-lg border-emerald-600/75 transition duration-100 ease-in hover:bg-gray-100/75 active:bg-gray-200/75"
+                    className="p-1 text-sm text-emerald-600/75 cursor-pointer border rounded-lg border-emerald-600/75 transition duration-100 ease-in hover:bg-gray-100/75 active:bg-gray-200/75"
                     onClick={() => setClusterMenu(!clusterMenu)}
                   >
                     {activeCluster.name}

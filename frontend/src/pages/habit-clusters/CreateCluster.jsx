@@ -4,12 +4,19 @@ import { FaPlus } from "react-icons/fa";
 import { useHabits } from "../../pages/HabitContext";
 
 const CreateCluster = () => {
-  const { clusterColors, clusters, defaultColor, addCluster } = useHabits();
+  const {
+    clusterColors,
+    clusters,
+    defaultColor,
+    addCluster,
+    colorMenu,
+    setColorMenu,
+    pickedColor,
+    setPickedColor,
+  } = useHabits();
 
   const [createClusterModal, setCreateClustertModal] = useState(false);
-  const [colorMenu, setColorMenu] = useState(false);
   const [newCluster, setNewCluster] = useState("");
-  const [pickedColor, setPickedColor] = useState(defaultColor);
 
   const handleAddCluster = () => {
     if (!newCluster.trim()) return;
@@ -49,14 +56,17 @@ const CreateCluster = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-100/55 z-20">
           <div
             className="flex flex-col justify-between gap-2 
-                  w-[80%] sm:w-[55%] md:w-[40%] h-80
+                  w-[70%] sm:w-[55%] md:w-[30%] h-50
                   p-4 border border-gray-200 bg-white shadow-md rounded-md"
           >
             <h1 className="font-bold text-2xl text-emerald-600/75">
               Create Cluster
             </h1>
-
-            <div className="flex flex-row gap-3">
+            <div
+              className="w-full h-0.5 rounded-md"
+              style={{ backgroundColor: pickedColor }}
+            ></div>
+            <div className="flex flex-row gap-3 m-auto">
               <label className="ml-2 text-gray-500 font-bold">Name</label>
               <input
                 className="border-1 mb- w-1/2 h-8 rounded-md border-gray-300 p-1"
@@ -94,6 +104,10 @@ const CreateCluster = () => {
                 )}
               </div>
             </div>
+            <div
+              className="w-full h-0.5 rounded-md"
+              style={{ backgroundColor: pickedColor }}
+            ></div>
 
             <div className="justify-end flex gap-2">
               <button
