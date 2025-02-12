@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/sidebar";
-import Habits from "./pages/habits/Habits";
-import HabitClusters from "./pages/habit-clusters/HabitClusters";
-import HabitStats from "./pages/habit-stats/HabitStats";
-import Account from "./pages/account/Account";
+import Habits from "./components/pages/habits/Habits";
+import HabitClusters from "./components/pages/habit-clusters/HabitClusters";
+import HabitStats from "./components/pages/habit-stats/HabitStats";
+import Account from "./components/pages/account/Account";
 import "./index.css";
 
 const App = () => {

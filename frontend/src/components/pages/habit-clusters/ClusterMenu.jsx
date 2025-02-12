@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHabits } from "../../pages/HabitContext";
+import { useHabits } from "../HabitContext";
 
 const ClusterMenu = () => {
   const { clusters, activeCluster, setActiveCluster } = useHabits();

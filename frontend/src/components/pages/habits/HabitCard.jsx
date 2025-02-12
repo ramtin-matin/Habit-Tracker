@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
-import { useHabits } from "../../pages/HabitContext";
+import { useHabits } from "../HabitContext";
 
 const HabitCard = ({ habit }) => {
   const { toggleHabitChecked, editHabit, deleteHabit, clusters } = useHabits();

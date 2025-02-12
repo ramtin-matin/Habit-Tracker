@@ -15,6 +15,10 @@ export const HabitProvider = ({ children }) => {
     { id: 8, name: "Cyan", hex: "#06B6D4" },
     { id: 9, name: "Rose", hex: "#F43F5E" },
     { id: 10, name: "Indigo", hex: "#6366F1" },
+    { id: 11, name: "Teal", hex: "#14B8A6" },
+    { id: 12, name: "Orange", hex: "#F97316" },
+    { id: 13, name: "Lime", hex: "#84CC16" },
+    { id: 14, name: "Amber", hex: "#F59E0B" },
   ];
 
   const defaultColor = clusterColors[0].hex;

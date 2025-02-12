@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { FaPlus } from "react-icons/fa";
-import { useHabits } from "../../pages/HabitContext";
+import { useHabits } from "../HabitContext";
 
 const CreateHabit = () => {
   const { habits, addHabit, clusters } = useHabits();
