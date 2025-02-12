@@ -132,6 +132,10 @@ const HabitClusters = () => {
                         alert("Can't delete General Cluster");
                         return;
                       }
+                      if (activeCluster.id === null) {
+                        alert("Can't delete All Habits Cluster");
+                        return;
+                      }
                       setEditMenu(false);
                       setColorMenu(false);
                       setPickedColor(defaultColor);
@@ -155,6 +159,10 @@ const HabitClusters = () => {
                     onClick={() => {
                       if (activeCluster.id === defaultCluster) {
                         alert("Can't edit General Cluster");
+                        return;
+                      }
+                      if (activeCluster.id === null) {
+                        alert("Can't edit All Habits Cluster");
                         return;
                       }
                       setEditMenu(false);
