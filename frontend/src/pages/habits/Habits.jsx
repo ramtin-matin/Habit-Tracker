@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import CreateHabit from "./CreateHabit";
 import HabitCard from "./HabitCard";
 import { useHabits } from "../../pages/HabitContext";
+import ClusterMenu from "../habit-clusters/ClusterMenu";
 import { ChevronDown } from "lucide-react";
 
 const Habits = () => {
-  const { habits } = useHabits();
+  const { habits, activeCluster } = useHabits();
   const [filterMenu, setFilterMenu] = useState(false);
   const [sortOrder, setSortOrder] = useState("default");
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,7 +35,7 @@ const Habits = () => {
       </div>
       <div className="max-w-95 md:max-w-110 bg-white w-full overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
         <div className="mt-3">
-          <div className="flex gap-2 ">
+          <div className="flex justify-evenly ">
             <button
               className="relative flex justify-center gap-4 text-sm p-2 font-bold cursor-pointer rounded-lg active:scale-99 text-emerald-600/75 hover:shadow-sm bg-white border-1 border-gray-300"
               onClick={() => setFilterMenu(!filterMenu)}
@@ -49,6 +50,7 @@ const Habits = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="border rounded-md p-2 w-40  font-bold text-xs border-gray-300 hover:shadow-sm text-gray-600"
             ></input>
+            <ClusterMenu />
           </div>
           <div className="relative">
             {filterMenu && (
@@ -82,10 +84,15 @@ const Habits = () => {
               </div>
             )}
           </div>
-
-          {sortedHabits.map((habit) => (
-            <HabitCard key={habit.id} habit={habit} />
-          ))}
+          {sortedHabits
+            .filter((habit) =>
+              activeCluster.id === null
+                ? true
+                : habit.clusterId === activeCluster.id
+            )
+            .map((habit) => (
+              <HabitCard key={habit.id} habit={habit} />
+            ))}
         </div>
       </div>
     </div>

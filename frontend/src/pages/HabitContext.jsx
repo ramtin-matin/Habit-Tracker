@@ -149,6 +149,7 @@ export const HabitProvider = ({ children }) => {
   };
 
   const deleteCluster = (clusterId) => {
+    // move old cluster habits to General Cluster
     setHabits((prevHabits) =>
       prevHabits.map((habit) =>
         habit.clusterId === clusterId

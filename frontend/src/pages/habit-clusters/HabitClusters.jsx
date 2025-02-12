@@ -2,6 +2,7 @@ import React, { act, useState } from "react";
 import CreateCluster from "./CreateCluster";
 import { useHabits } from "../../pages/HabitContext";
 import HabitCard from "../habits/HabitCard";
+import ClusterMenu from "../habit-clusters/ClusterMenu";
 
 const HabitClusters = () => {
   const {
@@ -21,7 +22,6 @@ const HabitClusters = () => {
   } = useHabits();
 
   const [editMenu, setEditMenu] = useState(false);
-  const [clusterMenu, setClusterMenu] = useState(false);
   const [edittedCluster, setEdittedCluster] = useState("");
 
   const handleEditCluster = (clusterId, newColor) => {
@@ -61,32 +61,7 @@ const HabitClusters = () => {
       </div>
       <div className="bg-white max-w-125 md:max-w-140 overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
         <div className="flex gap-2 relative justify-center">
-          <button
-            className="p-3 max-sm:scale-90 max-sm:text-xs text-emerald-600/75 hover:text-emerald-600 cursor-pointer shadow-sm border rounded-lg border-emerald-600/75 transition duration-100 ease-in active:bg-gray-50"
-            onClick={() => setClusterMenu(!clusterMenu)}
-          >
-            {activeCluster.name} Habits
-          </button>
-
-          {clusterMenu && (
-            <div className="p-3 z-10 absolute mt-15 bg-white border border-emerald-600/75 rounded-md shadow-lg">
-              <h1 className="text-emerald-600/75 font-bold ">Clusters</h1>
-              <div className="grid grid-cols-2 gap-4 mt-5">
-                {clusters.map((cluster) => (
-                  <button
-                    key={cluster.id}
-                    className="cursor-pointer transition duration-100 ease-in hover:text-emerald-600/75 rounded-md text-center text-gray-600/75 "
-                    onClick={() => {
-                      setActiveCluster({ id: cluster.id, name: cluster.name });
-                      setClusterMenu(false);
-                    }}
-                  >
-                    {cluster.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          <ClusterMenu />
           <button
             className="p-2 w-15 max-sm:scale-90 max-sm:text-xs text-white bg-emerald-600/75 hover: cursor-pointer border rounded-lg border-gray-300 shadow-sm transition duration-100 ease-in active:bg-emerald-600/80"
             onClick={() => setEditMenu(!editMenu)}
@@ -197,7 +172,11 @@ const HabitClusters = () => {
           )}
         </div>
         {habits
-          .filter((habit) => habit.clusterId === activeCluster.id)
+          .filter((habit) =>
+            activeCluster.id === null
+              ? true
+              : habit.clusterId === activeCluster.id
+          )
           .map((habit) => (
             <HabitCard key={habit.id} habit={habit} />
           ))}
