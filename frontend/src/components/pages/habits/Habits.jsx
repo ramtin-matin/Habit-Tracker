@@ -37,10 +37,10 @@ const Habits = () => {
         <div className="mt-3">
           <div className="flex gap-2 ">
             <button
-              className="relative flex justify-center gap-4 text-sm p-2 font-bold cursor-pointer rounded-lg active:scale-99 text-emerald-600/75 hover:shadow-xs bg-white border-1 border-gray-300"
+              className="relative flex justify-center gap-4 text-sm p-2 cursor-pointer rounded-lg active:scale-99 text-emerald-600/75 hover:shadow-xs bg-white border-1 border-gray-300"
               onClick={() => setFilterMenu(!filterMenu)}
             >
-              <span className="hidden sm:inline font-bold">Filter</span>
+              <span className="hidden sm:inline">Filter</span>
               <ChevronDown className="m-auto w-4 h-4" />
             </button>
             <input

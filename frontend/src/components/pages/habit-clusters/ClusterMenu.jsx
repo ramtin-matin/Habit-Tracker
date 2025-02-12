@@ -8,7 +8,7 @@ const ClusterMenu = () => {
   return (
     <div>
       <button
-        className="p-2 max-sm:scale-90 text-sm text-emerald-600/75 hover:text-emerald-600 cursor-pointer shadow-sm border rounded-lg border-emerald-600/75 transition duration-100 ease-in active:bg-gray-50"
+        className="p-2 max-sm:scale-90 text-sm text-emerald-600/75 hover:text-emerald-600 hover:shadow-xs cursor-pointer border rounded-lg border-gray-300 transition duration-100 ease-in active:bg-gray-50"
         onClick={() => setClusterMenu(!clusterMenu)}
       >
         {activeCluster.name} Habits

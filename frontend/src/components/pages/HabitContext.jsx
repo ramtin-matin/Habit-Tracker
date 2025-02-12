@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const HabitContext = createContext();
 
@@ -23,95 +23,35 @@ export const HabitProvider = ({ children }) => {
 
   const defaultColor = clusterColors[0].hex;
 
-  const [clusters, setClusters] = useState([
-    {
-      id: crypto.randomUUID(),
-      name: "General",
-      color: defaultColor,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Health",
-      color: clusterColors[1].hex,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Exercise",
-      color: clusterColors[2].hex,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Morning",
-      color: clusterColors[3].hex,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Afternoon",
-      color: clusterColors[4].hex,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Evening",
-      color: clusterColors[5].hex,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Night",
-      color: clusterColors[6].hex,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "After Work",
-      color: clusterColors[7].hex,
-    },
-  ]);
+  // set clusters to local storage
+  const [clusters, setClusters] = useState(() => {
+    const savedClusters = localStorage.getItem("clusters");
+    return savedClusters
+      ? JSON.parse(savedClusters)
+      : [
+          {
+            id: crypto.randomUUID(),
+            name: "General",
+            color: defaultColor,
+          },
+        ];
+  });
 
   const defaultCluster = clusters[0].id;
 
-  const [habits, setHabits] = useState([
-    {
-      id: crypto.randomUUID(),
-      name: "work out",
-      clusterId: clusters[0].id,
-      completed: false,
-      completedOn: null,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "read",
-      clusterId: clusters[1].id,
-      completed: false,
-      completedOn: null,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "drink water",
-      clusterId: clusters[2].id,
-      completed: false,
-      completedOn: null,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "homework",
-      clusterId: clusters[3].id,
-      completed: false,
-      completedOn: null,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "walk",
-      clusterId: clusters[4].id,
-      completed: false,
-      completedOn: null,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "journal",
-      clusterId: clusters[5].id,
-      completed: false,
-      completedOn: null,
-    },
-  ]);
+  // set habits to local storage
+  const [habits, setHabits] = useState(() => {
+    const savedHabits = localStorage.getItem("habits");
+    return savedHabits ? JSON.parse(savedHabits) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("habits", JSON.stringify(habits));
+  }, [habits]);
+
+  useEffect(() => {
+    localStorage.setItem("clusters", JSON.stringify(clusters));
+  }, [clusters]);
 
   // checks off habit and gets date when habit got completed
   const toggleHabitChecked = (habitId) => {

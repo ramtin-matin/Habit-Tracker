@@ -63,7 +63,7 @@ const HabitClusters = () => {
         <div className="flex gap-2 relative justify-center">
           <ClusterMenu />
           <button
-            className="p-2 w-15 max-sm:scale-90 max-sm:text-xs text-white bg-emerald-600/75 hover: cursor-pointer border rounded-lg border-gray-300 shadow-sm transition duration-100 ease-in active:bg-emerald-600/80"
+            className="p-1 w-15 max-sm:scale-90 max-sm:text-xs text-white bg-emerald-600/75 hover: cursor-pointer border rounded-lg border-gray-300 shadow-sm transition duration-100 ease-in active:bg-emerald-600/80"
             onClick={() => setEditMenu(!editMenu)}
           >
             Edit
