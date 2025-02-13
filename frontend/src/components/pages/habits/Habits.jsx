@@ -34,7 +34,7 @@ const Habits = () => {
         <CreateHabit />
       </div>
       <div className="max-w-95 md:max-w-110 bg-white w-full overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
-        <div className="mt-3">
+        <div className="mt-4">
           <div className="flex gap-2 ">
             <button
               className="relative flex justify-center gap-4 text-sm p-2 cursor-pointer rounded-lg active:scale-99 text-emerald-600/75 hover:shadow-xs bg-white border-1 border-gray-300"

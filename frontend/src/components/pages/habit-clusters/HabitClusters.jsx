@@ -60,7 +60,7 @@ const HabitClusters = () => {
         <CreateCluster />
       </div>
       <div className="bg-white max-w-125 md:max-w-140 overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
-        <div className="flex gap-2 relative justify-center">
+        <div className="flex gap-2 relative justify-center mt-4">
           <ClusterMenu />
           <button
             className="p-1 w-15 max-sm:scale-90 max-sm:text-xs text-white bg-emerald-600/75 hover: cursor-pointer border rounded-lg border-gray-300 shadow-sm transition duration-100 ease-in active:bg-emerald-600/80"

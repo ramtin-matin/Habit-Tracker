@@ -17,7 +17,10 @@ const CreateHabit = () => {
   const [newHabit, setNewHabit] = useState("");
 
   const handleAddHabit = () => {
-    if (!newHabit.trim()) return;
+    if (!newHabit.trim()) {
+      alert("Habit must have a name");
+      return;
+    }
 
     const habitExists = habits.some((habit) => habit.name === newHabit);
     if (habitExists) {
@@ -46,7 +49,7 @@ const CreateHabit = () => {
         className="relative flex justify-center gap-4 text-sm p-2 font-bold cursor-pointer rounded-lg active:scale-99 text-white hover:shadow-sm hover:bg-emerald-600/80 bg-emerald-600/75 border-1 border-gray-300"
       >
         <FaPlus className="m-auto text-xs" />
-        <span className="hidden sm:inline">Create</span>
+        <span className="hidden sm:inline">New Habit</span>
         <ChevronDown className="m-auto w-4 h-4" />
       </button>
       {createHabitModal && (

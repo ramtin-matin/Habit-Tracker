@@ -39,6 +39,10 @@ export const HabitProvider = ({ children }) => {
 
   const defaultCluster = clusters[0].id;
 
+  useEffect(() => {
+    localStorage.setItem("clusters", JSON.stringify(clusters));
+  }, [clusters]);
+
   // set habits to local storage
   const [habits, setHabits] = useState(() => {
     const savedHabits = localStorage.getItem("habits");
@@ -48,10 +52,6 @@ export const HabitProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("habits", JSON.stringify(habits));
   }, [habits]);
-
-  useEffect(() => {
-    localStorage.setItem("clusters", JSON.stringify(clusters));
-  }, [clusters]);
 
   // checks off habit and gets date when habit got completed
   const toggleHabitChecked = (habitId) => {
@@ -71,11 +71,13 @@ export const HabitProvider = ({ children }) => {
     );
   };
 
-  // edit the habit name
-  const editHabit = (habitId, updatedHabit) => {
+  // edit the habit name and cluster for the habit
+  const editHabit = (habitId, updatedHabit, clusterId) => {
     setHabits((prevHabits) =>
       prevHabits.map((habit) =>
-        habit.id === habitId ? { ...habit, name: updatedHabit } : habit
+        habit.id === habitId
+          ? { ...habit, name: updatedHabit, clusterId: clusterId }
+          : habit
       )
     );
   };
@@ -144,8 +146,8 @@ export const HabitProvider = ({ children }) => {
   const [pickedColor, setPickedColor] = useState(defaultColor);
 
   const [activeCluster, setActiveCluster] = useState({
-    id: clusters[0]?.id,
-    name: clusters[0]?.name,
+    id: null,
+    name: "All",
   });
 
   return (
