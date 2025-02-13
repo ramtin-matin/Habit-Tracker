@@ -1,28 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useHabits } from "../HabitContext";
 
 const ClusterMenu = () => {
-  const { clusters, activeCluster, setActiveCluster } = useHabits();
+  const { clusters, activeCluster, setActiveCluster, useOutsideClick } =
+    useHabits();
   const [clusterMenu, setClusterMenu] = useState(false);
-  const menuRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setClusterMenu(false);
-      }
-    };
+  const clusterMenuRef = useRef(null);
 
-    if (clusterMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [clusterMenu]);
+  useOutsideClick(clusterMenuRef, () => setClusterMenu(false), clusterMenu);
 
   return (
-    <div ref={menuRef}>
+    <div ref={clusterMenuRef}>
       <button
         className="p-2 h-full max-sm:scale-90 text-xs text-emerald-600/75 hover:text-emerald-600 hover:shadow-xs cursor-pointer border rounded-lg border-gray-300 transition duration-100 ease-in active:bg-gray-50"
         onClick={() => setClusterMenu(!clusterMenu)}
@@ -31,7 +20,10 @@ const ClusterMenu = () => {
       </button>
 
       {clusterMenu && (
-        <div className="p-3 z-10 absolute mt-2 bg-white border border-emerald-600/75 rounded-md shadow-lg">
+        <div
+          ref={clusterMenuRef}
+          className="p-3 z-10 absolute mt-2 bg-white border border-emerald-600/75 rounded-md shadow-lg"
+        >
           <h1 className="text-emerald-600/75 font-bold">Clusters</h1>
           <div className="grid grid-cols-2 gap-4 mt-5">
             <button

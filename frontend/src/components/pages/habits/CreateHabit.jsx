@@ -1,10 +1,10 @@
-import { React, useState } from "react";
+import { React, useState, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import { FaPlus } from "react-icons/fa";
 import { useHabits } from "../HabitContext";
 
 const CreateHabit = () => {
-  const { habits, addHabit, clusters } = useHabits();
+  const { habits, addHabit, clusters, useOutsideClick } = useHabits();
 
   const [clusterMenu, setClusterMenu] = useState(false);
   const [activeCluster, setActiveCluster] = useState({
@@ -12,6 +12,9 @@ const CreateHabit = () => {
     name: clusters[0]?.name,
     color: clusters[0]?.color,
   });
+
+  const clusterMenuRef = useRef(null);
+  useOutsideClick(clusterMenuRef, () => setClusterMenu(false), clusterMenu);
 
   const [createHabitModal, setCreateHabitModal] = useState(false);
   const [newHabit, setNewHabit] = useState("");
@@ -85,7 +88,10 @@ const CreateHabit = () => {
                   </button>
                 </div>
                 {clusterMenu && (
-                  <div className="p-3 z-10 w-60 absolute mt-2 bg-white border border-emerald-600/75 rounded-md shadow-lg">
+                  <div
+                    ref={clusterMenuRef}
+                    className="p-3 z-10 w-60 absolute mt-2 bg-white border border-emerald-600/75 rounded-md shadow-lg"
+                  >
                     <h1 className="text-emerald-600/75 font-bold ">Clusters</h1>
                     <div className="grid grid-cols-2 gap-4 mt-5">
                       {clusters.map((cluster) => (

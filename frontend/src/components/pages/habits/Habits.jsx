@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import CreateHabit from "./CreateHabit";
 import HabitCard from "./HabitCard";
 import { useHabits } from "../HabitContext";
@@ -6,7 +6,7 @@ import ClusterMenu from "../habit-clusters/ClusterMenu";
 import { ChevronDown } from "lucide-react";
 
 const Habits = () => {
-  const { habits, activeCluster } = useHabits();
+  const { habits, activeCluster, useOutsideClick } = useHabits();
   const [filterMenu, setFilterMenu] = useState(false);
   const [sortOrder, setSortOrder] = useState("default");
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,6 +14,10 @@ const Habits = () => {
   const filteredHabits = habits.filter((habit) =>
     habit.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const filterMenuRef = useRef(null);
+
+  useOutsideClick(filterMenuRef, () => setFilterMenu(false), filterMenu);
 
   const sortedHabits = [...filteredHabits].sort((a, b) => {
     if (sortOrder === "asc") return a.name.localeCompare(b.name);
@@ -54,7 +58,10 @@ const Habits = () => {
           </div>
           <div className="relative">
             {filterMenu && (
-              <div className="absolute mt-2 p-1 w-25 bg-white border-1 border-gray-200 shadow-md rounded-md z-10">
+              <div
+                ref={filterMenuRef}
+                className="absolute mt-2 p-1 w-25 bg-white border-1 border-gray-200 shadow-md rounded-md z-10"
+              >
                 <button
                   className="text-xs block font-bold w-full text-gray-500 px-4 py-2 text-left hover:bg-gray-100 hover:rounded-lg transition duration-150 ease-in"
                   onClick={() => {

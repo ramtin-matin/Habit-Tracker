@@ -146,9 +146,27 @@ export const HabitProvider = ({ children }) => {
   const [pickedColor, setPickedColor] = useState(defaultColor);
 
   const [activeCluster, setActiveCluster] = useState({
-    id: null,
-    name: "All",
+    id: clusters[0]?.id,
+    name: clusters[0]?.name,
   });
+
+  const useOutsideClick = (ref, callback, isActive) => {
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+          callback();
+        }
+      };
+
+      if (isActive) {
+        document.addEventListener("mousedown", handleClickOutside);
+      }
+
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [isActive, ref, callback]);
+  };
 
   return (
     <HabitContext.Provider
@@ -173,6 +191,7 @@ export const HabitProvider = ({ children }) => {
         activeCluster,
         setActiveCluster,
         defaultCluster,
+        useOutsideClick,
       }}
     >
       {children}

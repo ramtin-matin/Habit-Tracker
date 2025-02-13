@@ -1,10 +1,16 @@
-import { act, React, useState } from "react";
+import { useRef, React, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import { useHabits } from "../../pages/HabitContext";
 
 const HabitCard = ({ habit }) => {
-  const { habits, toggleHabitChecked, editHabit, deleteHabit, clusters } =
-    useHabits();
+  const {
+    habits,
+    toggleHabitChecked,
+    editHabit,
+    deleteHabit,
+    clusters,
+    useOutsideClick,
+  } = useHabits();
 
   const cluster = clusters.find((cluster) => cluster.id === habit.clusterId);
 
@@ -17,6 +23,12 @@ const HabitCard = ({ habit }) => {
     name: clusters[0]?.name,
     color: clusters[0]?.color,
   });
+
+  const threeDotMenuRef = useRef(null);
+  const clusterMenuRef = useRef(null);
+
+  useOutsideClick(threeDotMenuRef, () => setThreeDotMenu(null), threeDotMenu);
+  useOutsideClick(clusterMenuRef, () => setClusterMenu(false), clusterMenu);
 
   // handles edit habit function. if user changes only the name or changes only the cluster, or changes both.
   const handleEdit = (habitId, clusterId) => {
@@ -78,7 +90,10 @@ const HabitCard = ({ habit }) => {
 
           {/* Dropdown Menu */}
           {threeDotMenu === habit.id && (
-            <div className="absolute bottom-10 right-0 p-1 w-22 bg-white border-1 border-gray-200 shadow-md rounded-md z-10">
+            <div
+              ref={threeDotMenuRef}
+              className="absolute bottom-10 right-0 p-1 w-22 bg-white border-1 border-gray-200 shadow-md rounded-md z-10"
+            >
               <button
                 onClick={() => {
                   setEditMenu(habit.id);
@@ -133,7 +148,10 @@ const HabitCard = ({ habit }) => {
                       </button>
                     </div>
                     {clusterMenu && (
-                      <div className="p-3 z-10 w-60 absolute mt-2 bg-white border border-emerald-600/75 rounded-md shadow-lg">
+                      <div
+                        ref={clusterMenuRef}
+                        className="p-3 z-10 w-60 absolute mt-2 bg-white border border-emerald-600/75 rounded-md shadow-lg"
+                      >
                         <h1 className="text-emerald-600/75 font-bold ">
                           Clusters
                         </h1>

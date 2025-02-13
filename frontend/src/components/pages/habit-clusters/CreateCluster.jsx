@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import { FaPlus } from "react-icons/fa";
 import { useHabits } from "../../pages/HabitContext";
@@ -13,10 +13,15 @@ const CreateCluster = () => {
     setColorMenu,
     pickedColor,
     setPickedColor,
+    useOutsideClick,
   } = useHabits();
 
   const [createClusterModal, setCreateClustertModal] = useState(false);
   const [newCluster, setNewCluster] = useState("");
+
+  const colorMenuRef = useRef(null);
+
+  useOutsideClick(colorMenuRef, () => setColorMenu(false), colorMenu);
 
   const handleAddCluster = () => {
     if (!newCluster.trim()) return;
@@ -85,7 +90,10 @@ const CreateCluster = () => {
                   style={{ backgroundColor: pickedColor }}
                 ></div>
                 {colorMenu && (
-                  <div className="cursor-default p-2 grid grid-cols-3 gap-4 absolute mt-3 w-46 bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div
+                    ref={colorMenuRef}
+                    className="cursor-default p-2 grid grid-cols-3 gap-4 absolute mt-3 w-46 bg-white border border-gray-300 rounded-md shadow-lg"
+                  >
                     {clusterColors.map((color) => (
                       <div
                         key={color.name}

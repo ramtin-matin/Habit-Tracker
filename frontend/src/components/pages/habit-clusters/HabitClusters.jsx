@@ -1,4 +1,4 @@
-import React, { act, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CreateCluster from "./CreateCluster";
 import { useHabits } from "../../pages/HabitContext";
 import HabitCard from "../habits/HabitCard";
@@ -19,44 +19,51 @@ const HabitClusters = () => {
     activeCluster,
     setActiveCluster,
     defaultCluster,
+    useOutsideClick,
   } = useHabits();
 
   const [editMenu, setEditMenu] = useState(false);
   const [edittedCluster, setEdittedCluster] = useState("");
 
+  const colorMenuRef = useRef(null);
+
+  useOutsideClick(colorMenuRef, () => setColorMenu(false), colorMenu);
+
+  // handles cluster editting. if user edits the cluster name or cluster color, or both.
   const handleEditCluster = (clusterId, newColor) => {
     const updatedName = edittedCluster.trim()
       ? edittedCluster
       : activeCluster.name;
 
-    const clusterExists = clusters.some(
-      (cluster) => cluster.name === updatedName && cluster.id !== clusterId
-    );
-
-    if (clusterExists) {
+    if (
+      clusters.some(
+        (cluster) => cluster.name === updatedName && cluster.id !== clusterId
+      )
+    ) {
       alert("Cluster name already exists");
       return;
     }
+
     editCluster(clusterId, newColor, updatedName);
 
-    console.log("editted habit id: ", clusterId);
-    console.log("new name: ", edittedCluster);
+    if (activeCluster.id !== clusterId) {
+      setActiveCluster({ id: clusterId, name: updatedName });
+    }
 
-    setActiveCluster({ id: clusterId, name: updatedName });
     setEditMenu(false);
     setEdittedCluster("");
   };
 
   return (
     <div className="max-w-8xl h-full rounded-lg mx-auto p-2">
-      <h1 className=" text-5xl max-sm:text-4xl m-1 mb-2 font-bold text-emerald-600/75">
+      <h1 className="text-5xl max-sm:text-4xl m-1 mb-2 font-bold text-emerald-600/75">
         My Habit Clusters
       </h1>
       <p className="text-base max-sm:text-sm m-1 text-gray-500">
         Every habit belongs to a bigger system. Organize your habits, and you’ll
         organize your life.
       </p>
-      <div className=" border-1 border-gray-200 bg-white flex items-center gap-4 h-[8vh] sm:h-[10vh] lg:h-[11vh] max-sm:px-2 px-4 mt-4 rounded-sm">
+      <div className="border-1 border-gray-200 bg-white flex items-center gap-4 h-[8vh] sm:h-[10vh] lg:h-[11vh] max-sm:px-2 px-4 mt-4 rounded-sm">
         <CreateCluster />
       </div>
       <div className="bg-white max-w-125 md:max-w-140 overflow-x-hidden overflow-y-auto scrollbar border-1 border-gray-200 h-[70vh] p-5 mt-3 rounded-sm">
@@ -68,13 +75,10 @@ const HabitClusters = () => {
           >
             Edit
           </button>
+
           {editMenu && (
             <div className="fixed inset-0 flex items-center justify-center bg-gray-100/55 z-20">
-              <div
-                className="flex flex-col justify-between gap-2 
-                            w-[70%] sm:w-[55%] md:w-[30%] h-50
-                            p-4 border border-gray-200 bg-white shadow-md rounded-md"
-              >
+              <div className="flex flex-col justify-between gap-2 w-[70%] sm:w-[55%] md:w-[30%] h-50 p-4 border border-gray-200 bg-white shadow-md rounded-md">
                 <h1 className="font-bold text-2xl text-emerald-600/75">
                   {activeCluster.name} Cluster
                 </h1>
@@ -91,6 +95,7 @@ const HabitClusters = () => {
                     onChange={(e) => setEdittedCluster(e.target.value)}
                   />
                   <div
+                    ref={colorMenuRef}
                     className="p-1 w-8 h-8 border border-gray-300 rounded-md cursor-pointer relative"
                     onClick={() => setColorMenu(!colorMenu)}
                   >
@@ -106,8 +111,7 @@ const HabitClusters = () => {
                             key={color.name}
                             className="w-10 h-10 border flex justify-center cursor-pointer items-center border-gray-200 rounded-lg active:scale-95 hover:scale-103 hover:bg-gray-100/75"
                             onClick={() => {
-                              setPickedColor(color.hex),
-                                console.log("picked color: ", color);
+                              setPickedColor(color.hex);
                               setColorMenu(false);
                             }}
                           >
@@ -128,12 +132,11 @@ const HabitClusters = () => {
                 <div className="relative justify-end flex gap-2">
                   <button
                     onClick={() => {
-                      if (activeCluster.id === defaultCluster) {
-                        alert("Can't delete General Cluster");
-                        return;
-                      }
-                      if (activeCluster.id === null) {
-                        alert("Can't delete All Habits Cluster");
+                      if (
+                        activeCluster.id === defaultCluster ||
+                        activeCluster.id === null
+                      ) {
+                        alert("Cannot delete this cluster");
                         return;
                       }
                       setEditMenu(false);
@@ -141,7 +144,7 @@ const HabitClusters = () => {
                       setPickedColor(defaultColor);
                       deleteCluster(activeCluster.id);
                     }}
-                    className="font-bold w-[20%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-red-500/90 hover:bg-red-500/95 active:bg-red-500 cursor-pointer absolute left-0 "
+                    className="font-bold w-[20%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-red-500/90 hover:bg-red-500/95 active:bg-red-500 cursor-pointer absolute left-0"
                   >
                     Delete
                   </button>
@@ -157,17 +160,14 @@ const HabitClusters = () => {
                   </button>
                   <button
                     onClick={() => {
-                      if (activeCluster.id === defaultCluster) {
-                        alert("Can't edit General Cluster");
+                      if (
+                        activeCluster.id === defaultCluster ||
+                        activeCluster.id === null
+                      ) {
+                        alert("Cannot change this cluster");
                         return;
                       }
-                      if (activeCluster.id === null) {
-                        alert("Can't edit All Habits Cluster");
-                        return;
-                      }
-                      setEditMenu(false);
-                      setColorMenu(false);
-                      setPickedColor(defaultColor);
+
                       handleEditCluster(activeCluster.id, pickedColor);
                     }}
                     className="font-bold w-[25%] text-xs sm:text-sm p-2 border rounded-lg shadow-sm border-gray-200 text-white bg-emerald-600/75 hover:bg-emerald-600/80 active:bg-emerald-600/85 cursor-pointer"
@@ -180,10 +180,9 @@ const HabitClusters = () => {
           )}
         </div>
         {habits
-          .filter((habit) =>
-            activeCluster.id === null
-              ? true
-              : habit.clusterId === activeCluster.id
+          .filter(
+            (habit) =>
+              activeCluster.id === null || habit.clusterId === activeCluster.id
           )
           .map((habit) => (
             <HabitCard key={habit.id} habit={habit} />
