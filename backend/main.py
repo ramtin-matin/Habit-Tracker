@@ -5,15 +5,28 @@ from database import create_db_and_tables, get_session
 from sqlmodel import Session, select, or_
 from typing import List
 from datetime import datetime, date, timedelta
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+### Communicate with frontned (React Vite)
+origins = [
+  "http://localhost:5173", # Vite
+]
+
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=origins,
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
+###
 
 # create database / tables on startup
 @app.on_event("startup")
 def on_startup():
   create_db_and_tables()
-
-
 
 ### HABIT ENDPOINTS ###
 
