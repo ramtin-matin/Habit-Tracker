@@ -20,6 +20,11 @@ def on_startup():
 # Function to create a new habit
 @app.post("/habits", response_model=Habit)
 async def create_habit(new_habit: HabitCreate, session: Session = Depends(get_session)):
+  # check if inputted cluster exists, if not, raise error
+  if new_habit.cluster_id is not None:
+    cluster = session.get(Cluster, new_habit.cluster_id)
+    if not cluster:
+      raise HTTPException(status_code=404, detail="Cluster not found")
   habit = Habit.from_orm(new_habit)
   session.add(habit)
   session.commit()
@@ -57,10 +62,23 @@ async def update_habit(habit_id: int, updated_habit: HabitUpdate, session: Sessi
   if not habit:
     raise HTTPException(status_code=404, detail="Habit not found")
   
-  if updated_habit.name is not None:
+  # only fields sent by the client
+  fields_set = updated_habit.__fields_set__
+
+  if "name" in fields_set and updated_habit.name is not None:
     habit.name = updated_habit.name
-  if updated_habit.description is not None:
-    habit.description = updated_habit.description
+  
+  if "description" in fields_set and updated_habit.description is not None:
+      habit.description = updated_habit.description
+  
+  if "cluster_id" in fields_set:
+    if updated_habit.cluster_id is None:
+      habit.cluster_id = None
+    else:
+      cluster = session.get(Cluster, updated_habit.cluster_id)
+      if not cluster:
+        raise HTTPException(status_code=404, detail="Cluster not found")
+      habit.cluster_id = updated_habit.cluster_id
   
   habit.updated_at = datetime.utcnow()
 
