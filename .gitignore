@@ -4,6 +4,9 @@ __pycache__/
 backend/habits.db
 
 
+.env
+
+
 # macOS system files
 .DS_Store
 

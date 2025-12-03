@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { getHabits } from "../../api";
 
 const HabitContext = createContext();
 
@@ -43,15 +44,23 @@ export const HabitProvider = ({ children }) => {
     localStorage.setItem("clusters", JSON.stringify(clusters));
   }, [clusters]);
 
-  // set habits to local storage
-  const [habits, setHabits] = useState(() => {
-    const savedHabits = localStorage.getItem("habits");
-    return savedHabits ? JSON.parse(savedHabits) : [];
-  });
+  // React state for all habits in the app
+  const [habits, setHabits] = useState([]);
 
+  // On first mount, load habits from the backend API
   useEffect(() => {
-    localStorage.setItem("habits", JSON.stringify(habits));
-  }, [habits]);
+    async function loadHabits() {
+      try {
+        const data = await getHabits();
+        setHabits(data);
+        console.log("Loaded habits:", data);
+      } catch (err) {
+        console.error("Failed to load habits:", err);
+      }
+    }
+
+    loadHabits();
+  }, []);
 
   // checks off habit and gets date when habit got completed
   const toggleHabitChecked = (habitId) => {
