@@ -1,10 +1,11 @@
 from fastapi import FastAPI, HTTPException, Depends
 from models import Habit, HabitUpdate, HabitCreate
+from models import HabitLog, HabitLogCreate
 from models import Cluster, ClusterCreate, ClusterUpdate
 from database import create_db_and_tables, get_session
-from sqlmodel import Session, select, or_
+from sqlmodel import Session, select, or_, and_
 from typing import List
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -28,7 +29,7 @@ app.add_middleware(
 def on_startup():
   create_db_and_tables()
 
-### HABIT ENDPOINTS ###
+### START OF HABIT ENDPOINTS ###
 
 # Function to create a new habit
 @app.post("/habits", response_model=Habit)
@@ -38,7 +39,7 @@ async def create_habit(new_habit: HabitCreate, session: Session = Depends(get_se
     cluster = session.get(Cluster, new_habit.cluster_id)
     if not cluster:
       raise HTTPException(status_code=404, detail="Cluster not found")
-  habit = Habit.from_orm(new_habit)
+  habit = Habit.model_validate(new_habit)
   session.add(habit)
   session.commit()
   session.refresh(habit) # fetches auto generated id for the habit in db
@@ -46,14 +47,8 @@ async def create_habit(new_habit: HabitCreate, session: Session = Depends(get_se
 
 # Function to get all habits in DB
 @app.get("/habits", response_model=List[Habit])
-async def get_all_habits(completed_today: bool | None = None, session: Session = Depends(get_session)):
+async def get_all_habits(session: Session = Depends(get_session)):
   statement = select(Habit)
-  today = date.today()
-
-  if completed_today is True:
-    statement = statement.where(Habit.last_completed == today)
-  elif completed_today is False:
-    statement = statement.where(or_(Habit.last_completed < today, Habit.last_completed.is_(None)))
     
   results = session.exec(statement)
   habits = results.all()
@@ -67,33 +62,25 @@ async def get_habit(habit_id: int, session: Session = Depends(get_session)):
     raise HTTPException(status_code=404, detail="Habit not found")
   return habit
 
-# Function to update a habit's name and description
-@app.put("/habits/{habit_id}", response_model=Habit)
+# Function to update a habit's fields
+@app.patch("/habits/{habit_id}", response_model=Habit)
 async def update_habit(habit_id: int, updated_habit: HabitUpdate, session: Session = Depends(get_session)):
   habit = session.get(Habit, habit_id)
   
   if not habit:
     raise HTTPException(status_code=404, detail="Habit not found")
-  
-  # only fields sent by the client
-  fields_set = updated_habit.__fields_set__
 
-  if "name" in fields_set and updated_habit.name is not None:
-    habit.name = updated_habit.name
+  update_data = updated_habit.model_dump(exclude_unset=True)
+
+  if "cluster_id" in update_data and update_data["cluster_id"] is not None:
+    cluster = session.get(Cluster, update_data["cluster_id"])
+    if not cluster:
+      raise HTTPException(status_code=404, detail="Cluser not found")
   
-  if "description" in fields_set and updated_habit.description is not None:
-      habit.description = updated_habit.description
+  for field, value in update_data.items():
+    setattr(habit, field, value)
   
-  if "cluster_id" in fields_set:
-    if updated_habit.cluster_id is None:
-      habit.cluster_id = None
-    else:
-      cluster = session.get(Cluster, updated_habit.cluster_id)
-      if not cluster:
-        raise HTTPException(status_code=404, detail="Cluster not found")
-      habit.cluster_id = updated_habit.cluster_id
-  
-  habit.updated_at = datetime.utcnow()
+  habit.updated_at = datetime.now(timezone.utc)
 
   session.add(habit)
   session.commit()
@@ -111,47 +98,83 @@ async def delete_habit(habit_id: int, session: Session = Depends(get_session)):
   session.commit()
   return habit 
 
-# Logic to check when habit was completed last and update completion streak accordingly
-@app.post("/habits/{habit_id}/completion", response_model=Habit)
-async def complete_habit(habit_id: int, session: Session = Depends(get_session)):
+### END OF HABIT ENDPOINTS ###
+
+### START OF HABIT LOG ENDPOINTS ###
+
+# get all habit logs from and to a habit's designated date
+@app.get("/habitlogs/{habit_id}", response_model=List[HabitLog])
+async def getHabitLogs(habit_id: int, from_date: date, to_date: date, session: Session = Depends(get_session)):
   habit = session.get(Habit, habit_id)
   if not habit:
     raise HTTPException(status_code=404, detail="Habit not found")
 
-  today = date.today()
-  yesterday = today - timedelta(days=1)
+  # makes sure habit id matches, and is in between the designated range
+  statement = select(HabitLog).where(
+    and_(
+        HabitLog.habit_id == habit_id,
+        HabitLog.log_date >= from_date,
+        HabitLog.log_date <= to_date
+    )
+  )
 
-  last_completed_date = habit.last_completed
+  results = session.exec(statement).all()
 
-  if last_completed_date is None:
-    habit.completed_day_streak = 1
+  return results
 
-  elif last_completed_date == yesterday:
-    habit.completed_day_streak += 1
-
-  elif last_completed_date == today:
-    return habit
-
-  elif last_completed_date < yesterday:
-    habit.completed_day_streak = 1
+@app.post("/habitlogs/{habit_id}", response_model=HabitLog)
+async def createHabitLog(habit_id: int, new_habit_log: HabitLogCreate, session: Session = Depends(get_session)):
+  # check if inputted habit exists, if not, raise error
+  habit = session.get(Habit, habit_id)
+  if not habit:
+    raise HTTPException(status_code=404, detail="Habit not found")
   
-  habit.last_completed = today
-  habit.updated_at = datetime.utcnow()
+  # check if habit log for this date already exists, if not, raise error
+  statement = select(HabitLog).where(
+    and_(
+      HabitLog.habit_id == habit_id,
+      HabitLog.log_date == new_habit_log.log_date
+    )
+  )
 
-  session.add(habit)
+  log_exists = session.exec(statement).first()
+
+  if log_exists:
+    raise HTTPException(status_code=409, detail="Habit log already exists")
+  
+  # create a new habit log
+  habit_log = HabitLog(habit_id=habit_id, log_date=new_habit_log.log_date)
+  
+  session.add(habit_log)
   session.commit()
-  session.refresh(habit)
+  session.refresh(habit_log) # fetches auto generated id for the habit log in db
+  return habit_log
 
-  return habit
+# delete a habit log by specific habit and date
+@app.delete("/habitLogs/{habit_id}", response_model=HabitLog)
+async def deleteHabitLog(habit_id: int, log_date: date, session: Session = Depends(get_session)):
+  statement = select(HabitLog).where(and_(HabitLog.habit_id == habit_id, HabitLog.log_date == log_date))
+
+  habit_log = session.exec(statement).first()
+
+  if not habit_log:
+    raise HTTPException(status_code=404, detail="Habit log not found")
+
+  session.delete(habit_log)
+  session.commit()
+
+  return habit_log
+  
 
 
+### END OF HABIT LOG ENDPOINTS ###
 
-### CLUSTER ENDPOINTS ###
+### START OF CLUSTER ENDPOINTS ###
 
-# creating a cluster function
+# creating a cluster
 @app.post("/clusters", response_model=Cluster)
 async def create_cluster(new_cluster: ClusterCreate, session: Session = Depends(get_session)):
-  cluster = Cluster.from_orm(new_cluster)
+  cluster = Cluster.model_validate(new_cluster)
   session.add(cluster)
   session.commit()
   session.refresh(cluster) # fetches auto generated id for the cluster in db
@@ -200,14 +223,14 @@ async def delete_cluster(cluster_id: int, session: Session = Depends(get_session
   habits = session.exec(statement).all()
   for habit in habits:
     habit.cluster_id = None
-    habit.updated_at = datetime.utcnow()
+    habit.updated_at = datetime.now(timezone.utc)
 
   session.delete(cluster)
   session.commit()
 
   return cluster
 
-# update a cluster's name / description
+# update a cluster's name
 @app.put("/clusters/{cluster_id}", response_model=Cluster)
 async def update_cluster(cluster_id: int, updated_cluster: ClusterUpdate, session: Session = Depends(get_session)):
   cluster = session.get(Cluster, cluster_id)
@@ -217,10 +240,8 @@ async def update_cluster(cluster_id: int, updated_cluster: ClusterUpdate, sessio
   
   if updated_cluster.name is not None:
     cluster.name = updated_cluster.name
-  if updated_cluster.description is not None:
-    cluster.description = updated_cluster.description
 
-  cluster.updated_at = datetime.utcnow()
+  cluster.updated_at = datetime.now(timezone.utc)
 
   session.add(cluster)
   session.commit()
@@ -228,5 +249,5 @@ async def update_cluster(cluster_id: int, updated_cluster: ClusterUpdate, sessio
 
   return cluster
   
-
+### END OF CLUSTER ENDPOINTS ###
 
