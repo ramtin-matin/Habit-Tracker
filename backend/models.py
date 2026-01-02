@@ -37,7 +37,7 @@ class HabitLog(SQLModel, table=True):
   log_date: date
 
   # Foreign key to Habit table
-  habit_id: Optional[int] = Field(default=None, foreign_key="habit.id", sa_column_kwargs={"ondelete": "CASCADE"})
+  habit_id: Optional[int] = Field(default=None, foreign_key="habit.id")
 
 # Request model for creating a habit log
 class HabitLogCreate(SQLModel):

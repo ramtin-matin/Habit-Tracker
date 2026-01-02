@@ -76,7 +76,7 @@ async def update_habit(habit_id: int, updated_habit: HabitUpdate, session: Sessi
     cluster = session.get(Cluster, update_data["cluster_id"])
     if not cluster:
       raise HTTPException(status_code=404, detail="Cluser not found")
-  
+    
   for field, value in update_data.items():
     setattr(habit, field, value)
   
@@ -94,6 +94,12 @@ async def delete_habit(habit_id: int, session: Session = Depends(get_session)):
   if not habit:
     raise HTTPException(status_code=404, detail="Habit not found")
   
+  statement = select(HabitLog).where(HabitLog.habit_id == habit.id)
+  logs = session.exec(statement).all()
+  
+  for log in logs:
+    session.delete(log)
+    
   session.delete(habit)
   session.commit()
   return habit 
@@ -231,15 +237,17 @@ async def delete_cluster(cluster_id: int, session: Session = Depends(get_session
   return cluster
 
 # update a cluster's name
-@app.put("/clusters/{cluster_id}", response_model=Cluster)
+@app.patch("/clusters/{cluster_id}", response_model=Cluster)
 async def update_cluster(cluster_id: int, updated_cluster: ClusterUpdate, session: Session = Depends(get_session)):
   cluster = session.get(Cluster, cluster_id)
 
   if not cluster:
     raise HTTPException(status_code=404, detail="Cluster not found")
   
-  if updated_cluster.name is not None:
-    cluster.name = updated_cluster.name
+  update_data = updated_cluster.model_dump(exclude_unset=True)
+  
+  for field, value in update_data.items():
+    setattr(cluster, field, value)
 
   cluster.updated_at = datetime.now(timezone.utc)
 
@@ -250,4 +258,3 @@ async def update_cluster(cluster_id: int, updated_cluster: ClusterUpdate, sessio
   return cluster
   
 ### END OF CLUSTER ENDPOINTS ###
-
