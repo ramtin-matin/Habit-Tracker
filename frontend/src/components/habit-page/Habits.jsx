@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useHabits } from "../pages/HabitContext.jsx";
+import { useHabits } from "../HabitContext.jsx";
 import DayCell from "./DayCell.jsx";
 import HabitCard from "./HabitCard.jsx";
 import MonthNavigation from "./MonthNavigation.jsx";

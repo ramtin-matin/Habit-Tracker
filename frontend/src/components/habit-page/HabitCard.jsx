@@ -31,7 +31,7 @@ const HabitCard = ({ habit, year, month, onToggleCompletion }) => {
             className="w-3 h-3 rounded-full"
             // style={{ backgroundColor: habit.color }}
           />
-          {/* <h3 className="font-semibold truncate max-w-[140px]">{habit.name}</h3> */}
+          <h3 className="font-semibold truncate max-w-[140px]">{habit.name}</h3>
         </div>
         <button className="text-slate-400 hover:text-slate-600">
           <MoreVertical size={18} />

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
-import { HabitProvider } from "./components/pages/HabitContext";
+import { HabitProvider } from "./components/HabitContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -12,5 +12,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <App />
       </HabitProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

@@ -7,7 +7,7 @@ import {
   getHabitById,
   updateHabitById,
   getAllHabitLogs,
-} from "../../api";
+} from "../api";
 
 const HabitContext = createContext();
 
@@ -94,11 +94,6 @@ export const HabitProvider = ({ children }) => {
 
   /// END OF API CALLS ///
 
-  const [activeCluster, setActiveCluster] = useState({
-    id: clusters[0]?.id,
-    name: clusters[0]?.name,
-  });
-
   return (
     <HabitContext.Provider
       value={{
@@ -109,8 +104,6 @@ export const HabitProvider = ({ children }) => {
         handleEditHabit,
         addHabit,
         handleDeleteHabit,
-        activeCluster,
-        setActiveCluster,
         getHabitById,
       }}
     >

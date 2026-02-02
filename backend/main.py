@@ -109,16 +109,11 @@ async def delete_habit(habit_id: int, session: Session = Depends(get_session)):
 ### START OF HABIT LOG ENDPOINTS ###
 
 # get all habit logs from and to a habit's designated date
-@app.get("/habitlogs/{habit_id}", response_model=List[HabitLog])
-async def getHabitLogs(habit_id: int, from_date: date, to_date: date, session: Session = Depends(get_session)):
-  habit = session.get(Habit, habit_id)
-  if not habit:
-    raise HTTPException(status_code=404, detail="Habit not found")
-
-  # makes sure habit id matches, and is in between the designated range
+@app.get("/habitlogs", response_model=List[HabitLog])
+async def getHabitLogs(from_date: date, to_date: date, session: Session = Depends(get_session)):
+  # makes sure habit logs are in between the designated range
   statement = select(HabitLog).where(
     and_(
-        HabitLog.habit_id == habit_id,
         HabitLog.log_date >= from_date,
         HabitLog.log_date <= to_date
     )
