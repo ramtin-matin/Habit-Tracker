@@ -1,61 +1,55 @@
+from datetime import datetime, date, UTC
 from typing import Optional
 
-from sqlmodel import SQLModel, Field
-from datetime import datetime, date, timezone
+from sqlmodel import Field, SQLModel
 
-def utc_now():
-    return datetime.now(timezone.utc)
+def utc_now() -> datetime:
+    return datetime.now(UTC)
 
-# Table model for Habit
-class Habit(SQLModel, table=True):
-  # basic information about habit
-  id: Optional[int] = Field(default=None, primary_key=True)
-  name: str = Field(min_length=1, max_length=100)
-  # creation / update date
-  created_at: datetime = Field(default_factory=utc_now)
-  updated_at: datetime = Field(default_factory=utc_now)
-  # when habit was first set active or deactivate (used for logging habit completion)
-  active_from: Optional[date] = None
-  active_to: Optional[date] = None
+class User(SQLModel, table=True):
+    __tablename__ = "users"
 
-  # relation to Cluster table
-  cluster_id: Optional[int] = Field(default=None, foreign_key="cluster.id")
+    id: str = Field(primary_key=True, max_length=36)
+    created_at: datetime = Field(default_factory=utc_now)
 
-# Request model for creating a habit
-class HabitCreate(SQLModel):
-  name: str
-  cluster_id: Optional[int] = None
-
-# Request model for updating a habit
-class HabitUpdate(SQLModel):
-  name: Optional[str] = None
-  cluster_id: Optional[int] = None
-
-# Table model for Habit Log (when habit is completed/incompleted)
-class HabitLog(SQLModel, table=True):
-  id: Optional[int] = Field(default=None, primary_key=True)
-  log_date: date
-
-  # Foreign key to Habit table
-  habit_id: Optional[int] = Field(default=None, foreign_key="habit.id")
-
-# Request model for creating a habit log
-class HabitLogCreate(SQLModel):
-  log_date: date
-
-# Table model for Cluster
 class Cluster(SQLModel, table=True):
-  # basic information about cluster
-  id: Optional[int] = Field(default=None, primary_key=True)
-  name: str = Field(min_length=1, max_length=100)
-  # creation / update date
-  created_at: datetime = Field(default_factory=utc_now)
-  updated_at: datetime = Field(default_factory=utc_now)
+    __tablename__ = "clusters"
 
-# Request model for creating a cluster
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: str = Field(foreign_key="users.id", max_length=36)
+    name: str = Field(min_length=1, max_length=100)
+    created_at: datetime = Field(default_factory=utc_now)
+    updated_at: datetime = Field(default_factory=utc_now)
+
 class ClusterCreate(SQLModel):
-  name: str
+    name: str
 
-# Request model for updating a cluster
 class ClusterUpdate(SQLModel):
-  name: Optional[str] = None
+    name: Optional[str] = None
+
+class Habit(SQLModel, table=True):
+    __tablename__ = "habits"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: str = Field(foreign_key="users.id", max_length=36)
+    name: str = Field(min_length=1, max_length=100)
+    created_at: datetime = Field(default_factory=utc_now)
+    updated_at: datetime = Field(default_factory=utc_now)
+    cluster_id: Optional[int] = Field(default=None, foreign_key="clusters.id")
+
+class HabitCreate(SQLModel):
+    name: str
+    cluster_id: Optional[int] = None
+
+class HabitUpdate(SQLModel):
+    name: Optional[str] = None
+    cluster_id: Optional[int] = None
+
+class HabitLog(SQLModel, table=True):
+    __tablename__ = "habit_logs"
+
+    log_date: date = Field(primary_key=True)
+    habit_id: int = Field(primary_key=True, foreign_key="habits.id")
+
+class HabitLogCreate(SQLModel):
+    log_date: date

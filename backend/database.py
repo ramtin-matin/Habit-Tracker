@@ -1,17 +1,9 @@
-from sqlmodel import SQLModel, create_engine, Session
+from sqlmodel import Session, create_engine
 
-# define path to SQLite database file
-sqlite_file = "habits.db"
-sqlite_url = f"sqlite:///{sqlite_file}"
+from config import DATABASE_URL, SQL_ECHO
 
-# create database engine
-engine = create_engine(sqlite_url, echo=True)
+engine = create_engine(DATABASE_URL, echo=SQL_ECHO, pool_pre_ping=True)
 
-# start session function
 def get_session():
-  with Session(engine) as session:
-    yield session
-
-# create database tables function
-def create_db_and_tables():
-  SQLModel.metadata.create_all(engine)
+    with Session(engine) as session:
+        yield session

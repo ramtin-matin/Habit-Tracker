@@ -1,46 +1,99 @@
-import { createContext, useContext, useState, useEffect } from "react";
 import {
-  getAllClusters,
-  getAllHabits,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import {
   createHabit,
+  createHabitLog,
   deleteHabit,
+  deleteHabitLog,
+  getAllClusters,
+  getAllHabitLogs,
+  getAllHabits,
   getHabitById,
   updateHabitById,
-  getAllHabitLogs,
 } from "../api";
 
 const HabitContext = createContext();
 
 export const HabitProvider = ({ children }) => {
-  /// START OF API CALLS ///
-
-  // React state for all habits in the app
   const [habits, setHabits] = useState([]);
+  const [clusters, setClusters] = useState([]);
+  const [habitLogs, setHabitLogs] = useState([]);
 
-  // On first mount, load habits from the backend API
   useEffect(() => {
     async function loadHabits() {
       try {
         const data = await getAllHabits();
-        setHabits(data);
-        console.log("Loaded habits: ", data);
+        setHabits(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error("Failed to load habits: ", err);
+        console.error("Failed to load habits:", err);
       }
     }
 
     loadHabits();
   }, []);
 
+  useEffect(() => {
+    async function loadClusters() {
+      try {
+        const data = await getAllClusters();
+        setClusters(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to load clusters:", err);
+      }
+    }
+
+    loadClusters();
+  }, []);
+
+  const loadHabitLogs = useCallback(async () => {
+    try {
+      const data = await getAllHabitLogs();
+      const logs = Array.isArray(data) ? data : [];
+      setHabitLogs(logs);
+      return logs;
+    } catch (err) {
+      console.error("Failed to load habit logs:", err);
+      throw err;
+    }
+  }, []);
+
+  const toggleHabitCompletion = async (habitId, dateKey) => {
+    const existingLog = habitLogs.find(
+      (log) => log.habit_id === habitId && log.log_date === dateKey,
+    );
+
+    try {
+      if (existingLog) {
+        await deleteHabitLog(habitId, dateKey);
+        setHabitLogs((prevLogs) =>
+          prevLogs.filter(
+            (log) => !(log.habit_id === habitId && log.log_date === dateKey),
+          ),
+        );
+        return false;
+      }
+
+      const createdLog = await createHabitLog(habitId, { log_date: dateKey });
+      setHabitLogs((prevLogs) => [createdLog, ...prevLogs]);
+      return true;
+    } catch (err) {
+      console.error("Failed to toggle habit log:", err);
+      throw err;
+    }
+  };
+
   const addHabit = async (habitInput) => {
     try {
       const createdHabit = await createHabit(habitInput);
       setHabits((prev) => [createdHabit, ...prev]);
-
-      console.log("New habit created: ", createdHabit);
       return createdHabit;
     } catch (err) {
-      console.error("Failed to create new habit: ", err);
+      console.error("Failed to create new habit:", err);
       throw err;
     }
   };
@@ -49,62 +102,43 @@ export const HabitProvider = ({ children }) => {
     try {
       const deletedHabit = await deleteHabit(habitId);
       setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
-
-      console.log("Habit ID deleted: ", habitId);
+      setHabitLogs((prevLogs) =>
+        prevLogs.filter((log) => log.habit_id !== habitId),
+      );
       return deletedHabit;
     } catch (err) {
-      console.error("Failed to delete habit: ", err);
+      console.error("Failed to delete habit:", err);
       throw err;
     }
   };
 
-  const handleEditHabit = async (habit_id, updatedFields) => {
+  const handleEditHabit = async (habitId, updatedFields) => {
     try {
-      const update = await updateHabitById(habit_id, updatedFields);
+      const updatedHabit = await updateHabitById(habitId, updatedFields);
       setHabits((prevHabits) =>
         prevHabits.map((habit) =>
-          habit.id === habit_id ? { ...habit, ...updatedFields } : habit,
+          habit.id === habitId ? updatedHabit : habit,
         ),
       );
-      console.log("Updated fields: ", update);
-      return update;
+      return updatedHabit;
     } catch (err) {
-      console.error("Failed to update habit: ", err);
+      console.error("Failed to update habit:", err);
       throw err;
     }
   };
-
-  // react state for all clusters in the app
-  const [clusters, setClusters] = useState([]);
-
-  // On first mount, load clusters from the backend API
-  useEffect(() => {
-    async function loadClusters() {
-      try {
-        const data = await getAllClusters();
-        setClusters(data);
-        console.log("Loaded clusters: ", data);
-      } catch (err) {
-        console.error("Failed to load clusters: ", err);
-      }
-    }
-
-    loadClusters();
-  }, []);
-
-  /// END OF API CALLS ///
 
   return (
     <HabitContext.Provider
       value={{
-        habits,
-        setHabits,
-        clusters,
-        setClusters,
-        handleEditHabit,
         addHabit,
+        clusters,
+        habitLogs,
+        habits,
         handleDeleteHabit,
+        handleEditHabit,
+        loadHabitLogs,
         getHabitById,
+        toggleHabitCompletion,
       }}
     >
       {children}

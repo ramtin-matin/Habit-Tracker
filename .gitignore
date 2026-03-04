@@ -5,6 +5,8 @@ backend/habits.db
 
 
 .env
+.env.*
+backend/config.py
 
 
 # macOS system files
