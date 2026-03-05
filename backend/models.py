@@ -20,12 +20,15 @@ class Cluster(SQLModel, table=True):
     name: str = Field(min_length=1, max_length=100)
     created_at: datetime = Field(default_factory=utc_now)
     updated_at: datetime = Field(default_factory=utc_now)
+    color: str = Field(default="#8E8E8E")
 
 class ClusterCreate(SQLModel):
     name: str
+    color: str = "#8E8E8E"
 
 class ClusterUpdate(SQLModel):
     name: Optional[str] = None
+    color: Optional[str] = None
 
 class Habit(SQLModel, table=True):
     __tablename__ = "habits"

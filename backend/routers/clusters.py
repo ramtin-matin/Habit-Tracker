@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import List
 
 from fastapi import APIRouter, Depends
@@ -81,7 +81,7 @@ async def update_cluster(
     for field, value in update_data.items():
         setattr(cluster, field, value)
 
-    cluster.updated_at = datetime.utcnow()
+    cluster.updated_at = datetime.now(UTC)
 
     session.add(cluster)
     session.commit()

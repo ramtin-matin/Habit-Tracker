@@ -35,6 +35,7 @@ const Habits = () => {
   const groupedHabits = clusters.map((cluster) => ({
     id: cluster.id,
     title: cluster.name,
+    color: cluster.color ?? "#8E8E8E",
     habits: habits.filter((habit) => habit.cluster_id === cluster.id),
   }));
 
@@ -88,7 +89,11 @@ const Habits = () => {
         <div className="space-y-12">
           {groupedHabits.map((group) => (
             <section key={group.id}>
-              <GroupHeader title={group.title} count={group.habits.length} />
+              <GroupHeader
+                title={group.title}
+                count={group.habits.length}
+                clusterColor={group.color}
+              />
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {group.habits.map((habit) => (
@@ -96,6 +101,7 @@ const Habits = () => {
                     key={habit.id}
                     habit={habit}
                     habitLogs={habitLogs}
+                    clusterColor={group.color}
                     year={currentYear}
                     month={currentMonth}
                     onToggleCompletion={toggleHabitCompletion}
@@ -104,7 +110,10 @@ const Habits = () => {
                   />
                 ))}
 
-                <button className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center p-8 text-slate-400 hover:text-emerald-300 dark:hover:border-emerald-300 cursor-pointer transition-all hover:bg-white dark:hover:bg-slate-900/50 group">
+                <button
+                  className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center p-8 text-slate-400 cursor-pointer transition-all hover:bg-white dark:hover:bg-slate-900/50 hover:text-[var(--cluster-color)] hover:border-[var(--cluster-color)] group"
+                  style={{ "--cluster-color": group.color }}
+                >
                   <Plus
                     size={32}
                     className="mb-2 group-hover:scale-110 transition-transform"

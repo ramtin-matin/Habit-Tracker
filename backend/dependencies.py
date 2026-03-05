@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 
 from models import Cluster, Habit, User
 
-
+# get user id from request headers
 def resolve_user_id(x_user_id: str = Header(..., alias="X-User-Id")) -> str:
     return x_user_id
 

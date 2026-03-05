@@ -4,11 +4,11 @@ import DayCell from "./DayCell";
 const ACCENT_COLOR = "#34d399";
 const DAYS_OF_WEEK = ["S", "M", "T", "W", "T", "F", "S"];
 
-const ProgressBar = ({ progressPercentage, color }) => (
+const ProgressBar = ({ progressPercentage, clusterColor }) => (
   <div className="h-1.5 w-24 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
     <div
       className="h-full transition-all duration-500"
-      style={{ width: `${progressPercentage}%`, backgroundColor: color }}
+      style={{ width: `${progressPercentage}%`, backgroundColor: clusterColor }}
     />
   </div>
 );
@@ -49,6 +49,7 @@ function HabitCard({
   onToggleCompletion,
   onDeleteHabit,
   onEditHabit,
+  clusterColor,
 }) {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const startPadding = new Date(year, month, 1).getDay();
@@ -116,7 +117,7 @@ function HabitCard({
         <div className="flex items-center gap-3">
           <div
             className="w-3 h-3 rounded-full"
-            style={{ backgroundColor: ACCENT_COLOR }}
+            style={{ backgroundColor: clusterColor }}
           />
           <h3 className="font-semibold truncate max-w-[140px]">{habit.name}</h3>
         </div>
@@ -142,7 +143,7 @@ function HabitCard({
         </details>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center">
+      <div className="grid grid-cols-7 gap-1.5 text-center">
         {DAYS_OF_WEEK.map((label, index) => (
           <span
             key={`${label}-${index}`}
@@ -168,7 +169,7 @@ function HabitCard({
               key={dateKey}
               dayNumber={dayNumber}
               isCompleted={isCompleted}
-              habitColor={ACCENT_COLOR}
+              clusterColor={clusterColor}
               isToday={isToday}
               onClick={() => onToggleCompletion(habit.id, dateKey)}
             />
@@ -183,7 +184,7 @@ function HabitCard({
         </span>
         <ProgressBar
           progressPercentage={progressPercentage}
-          color={ACCENT_COLOR}
+          clusterColor={clusterColor}
         />
       </div>
     </div>
