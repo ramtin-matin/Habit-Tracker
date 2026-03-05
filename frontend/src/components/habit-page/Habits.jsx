@@ -4,9 +4,8 @@ import HabitCard from "./HabitCard.jsx";
 import MonthNavigation from "./MonthNavigation.jsx";
 import { FolderPlus, Plus } from "lucide-react";
 import GroupHeader from "./GroupHeader.jsx";
-
-const BG_GRADIENT =
-  "bg-[linear-gradient(-12deg,rgb(83,188,226),rgb(79,149,144),rgb(50,200,123))]";
+import CreateClusterModal from "./CreateClusterModal.jsx";
+import { THEME_GRADIENT_BG_CLASS } from "./themeGradients.js";
 
 const Habits = () => {
   const {
@@ -17,8 +16,10 @@ const Habits = () => {
     handleEditHabit,
     toggleHabitCompletion,
     handleDeleteHabit,
+    handleCreateCluster,
   } = useHabits();
   const [currentViewDate, setCurrentViewDate] = useState(new Date());
+  const [isCreateClusterOpen, setIsCreateClusterOpen] = useState(false);
 
   useEffect(() => {
     async function loadAllHabitLogs() {
@@ -79,7 +80,7 @@ const Habits = () => {
               onNavigate={handleMonthNavigation}
             />
             <button
-              className={`${BG_GRADIENT} cursor-pointer text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all active:scale-95`}
+              className={`${THEME_GRADIENT_BG_CLASS} cursor-pointer text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all active:scale-95`}
             >
               <Plus size={20} /> <span>New Habit</span>
             </button>
@@ -125,12 +126,22 @@ const Habits = () => {
           ))}
 
           <div className="flex justify-center pb-12">
-            <button className="flex items-center gap-2 text-emerald-300 hover:text-emerald-400 cursor-pointer dark:hover:text-emerald-400 font-medium px-6 py-3 rounded-2xl border border-transparent hover:border-emerald-400 dark:hover:border-emerald-400 transition-colors">
+            <button
+              className="flex items-center gap-2 text-emerald-300 hover:text-emerald-400 cursor-pointer dark:hover:text-emerald-400 font-medium px-6 py-3 rounded-2xl border border-transparent hover:border-emerald-400 dark:hover:border-emerald-400 transition-colors"
+              onClick={() => setIsCreateClusterOpen(true)}
+            >
               <FolderPlus size={20} /> <span>Create New Cluster</span>
             </button>
           </div>
         </div>
       </div>
+
+      <CreateClusterModal
+        isOpen={isCreateClusterOpen}
+        onClose={() => setIsCreateClusterOpen(false)}
+        clusters={clusters}
+        onCreateCluster={handleCreateCluster}
+      />
     </div>
   );
 };

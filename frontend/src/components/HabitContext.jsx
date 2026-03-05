@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import {
+  createCluster,
   createHabit,
   createHabitLog,
   deleteHabit,
@@ -127,6 +128,17 @@ export const HabitProvider = ({ children }) => {
     }
   };
 
+  const handleCreateCluster = async (newCluster) => {
+    try {
+      const createdCluster = await createCluster(newCluster);
+      setClusters((prev) => [createdCluster, ...prev]);
+      return createdCluster;
+    } catch (err) {
+      console.error("Failed to create new cluster:", err);
+      throw err;
+    }
+  };
+
   return (
     <HabitContext.Provider
       value={{
@@ -139,6 +151,7 @@ export const HabitProvider = ({ children }) => {
         loadHabitLogs,
         getHabitById,
         toggleHabitCompletion,
+        handleCreateCluster,
       }}
     >
       {children}
