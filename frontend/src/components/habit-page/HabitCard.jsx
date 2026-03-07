@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { MoreVertical } from "lucide-react";
 import DayCell from "./DayCell";
+import EditHabitModal from "./EditHabitModal.jsx";
 
 const ACCENT_COLOR = "#34d399";
 const DAYS_OF_WEEK = ["S", "M", "T", "W", "T", "F", "S"];
@@ -47,10 +49,12 @@ function HabitCard({
   year,
   month,
   onToggleCompletion,
+  clusterColor,
+  clusters,
   onDeleteHabit,
   onEditHabit,
-  clusterColor,
 }) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const startPadding = new Date(year, month, 1).getDay();
   const todayDateString = new Date().toDateString();
@@ -83,111 +87,85 @@ function HabitCard({
 
   const streak = getCurrentStreak(habitAllDateKeys);
 
-  const handleEditClick = async () => {
-    const nextName = window.prompt("Edit habit name", habit.name)?.trim();
-
-    if (!nextName || nextName === habit.name) {
-      return;
-    }
-
-    try {
-      await onEditHabit(habit.id, { name: nextName });
-    } catch (err) {
-      console.error("Failed to edit habit:", err);
-    }
-  };
-
-  const handleDeleteClick = async () => {
-    const confirmed = window.confirm(`Delete "${habit.name}"?`);
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      await onDeleteHabit(habit.id);
-    } catch (err) {
-      console.error("Failed to delete habit:", err);
-    }
-  };
-
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-3">
-          <div
-            className="w-3 h-3 rounded-full"
-            style={{ backgroundColor: clusterColor }}
-          />
-          <h3 className="font-semibold truncate max-w-[140px]">{habit.name}</h3>
-        </div>
-        <details className="relative">
-          <summary className="list-none text-slate-400 hover:text-slate-600 cursor-pointer">
-            <MoreVertical size={18} />
-          </summary>
-
-          <div className="absolute right-0 top-8 z-10 w-28 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg overflow-hidden">
-            <button
-              className="block w-full px-3 py-2 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
-              onClick={handleEditClick}
-            >
-              Edit
-            </button>
-            <button
-              className="block w-full px-3 py-2 text-left text-sm text-red-500 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
-              onClick={handleDeleteClick}
-            >
-              Delete
-            </button>
-          </div>
-        </details>
-      </div>
-
-      <div className="grid grid-cols-7 gap-1.5 text-center">
-        {DAYS_OF_WEEK.map((label, index) => (
-          <span
-            key={`${label}-${index}`}
-            className="text-[10px] font-bold text-slate-400 mb-1"
-          >
-            {label}
-          </span>
-        ))}
-
-        {Array.from({ length: startPadding }).map((_, index) => (
-          <div key={`padding-${index}`} className="aspect-square" />
-        ))}
-
-        {Array.from({ length: daysInMonth }).map((_, index) => {
-          const dayNumber = index + 1;
-          const dateKey = formatDateKey(year, month, dayNumber);
-          const isToday =
-            todayDateString === new Date(year, month, dayNumber).toDateString(); // used for highlighting current day in grid
-          const isCompleted = visibleMonthCompletedDateKeys.includes(dateKey);
-
-          return (
-            <DayCell
-              key={dateKey}
-              dayNumber={dayNumber}
-              isCompleted={isCompleted}
-              clusterColor={clusterColor}
-              isToday={isToday}
-              onClick={() => onToggleCompletion(habit.id, dateKey)}
+    <>
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: clusterColor }}
             />
-          );
-        })}
+            <h3 className="font-semibold truncate max-w-[140px]">
+              {habit.name}
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsEditModalOpen(true)}
+            className="rounded-lg p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+            aria-label={`Edit ${habit.name}`}
+          >
+            <MoreVertical size={18} />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-7 gap-1.5 text-center">
+          {DAYS_OF_WEEK.map((label, index) => (
+            <span
+              key={`${label}-${index}`}
+              className="text-[10px] font-bold text-slate-400 mb-1"
+            >
+              {label}
+            </span>
+          ))}
+
+          {Array.from({ length: startPadding }).map((_, index) => (
+            <div key={`padding-${index}`} className="aspect-square" />
+          ))}
+
+          {Array.from({ length: daysInMonth }).map((_, index) => {
+            const dayNumber = index + 1;
+            const dateKey = formatDateKey(year, month, dayNumber);
+            const isToday =
+              todayDateString ===
+              new Date(year, month, dayNumber).toDateString(); // used for highlighting current day in grid
+            const isCompleted = visibleMonthCompletedDateKeys.includes(dateKey);
+
+            return (
+              <DayCell
+                key={dateKey}
+                dayNumber={dayNumber}
+                isCompleted={isCompleted}
+                clusterColor={clusterColor}
+                isToday={isToday}
+                onClick={() => onToggleCompletion(habit.id, dateKey)}
+              />
+            );
+          })}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-500">
+          <span>
+            Streak:{" "}
+            <b className="text-slate-800 dark:text-slate-200">{streak} days</b>
+          </span>
+          <ProgressBar
+            progressPercentage={progressPercentage}
+            clusterColor={clusterColor}
+          />
+        </div>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-500">
-        <span>
-          Streak:{" "}
-          <b className="text-slate-800 dark:text-slate-200">{streak} days</b>
-        </span>
-        <ProgressBar
-          progressPercentage={progressPercentage}
-          clusterColor={clusterColor}
-        />
-      </div>
-    </div>
+      <EditHabitModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        habit={habit}
+        clusters={clusters ?? []}
+        onDeleteHabit={onDeleteHabit}
+        onEditHabit={onEditHabit}
+      />
+    </>
   );
 }
 

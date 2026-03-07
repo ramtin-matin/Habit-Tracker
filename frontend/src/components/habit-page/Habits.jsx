@@ -115,6 +115,7 @@ const Habits = () => {
                     key={habit.id}
                     habit={habit}
                     habitLogs={habitLogs}
+                    clusters={clusters}
                     clusterColor={group.color}
                     year={currentYear}
                     month={currentMonth}
