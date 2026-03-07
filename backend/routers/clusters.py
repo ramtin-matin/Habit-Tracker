@@ -63,6 +63,14 @@ async def delete_cluster(
     user_id: str = Depends(resolve_user_id),
 ):
     cluster = get_user_cluster_or_404(session, cluster_id, user_id)
+
+    # reassing cluster's habits
+    statement = select(Habit).where(Habit.cluster_id == cluster_id)
+    habits = session.exec(statement).all()
+    for habit in habits:
+        habit.cluster_id = None
+        habit.updated_at = datetime.now(UTC)
+    
     session.delete(cluster)
     session.commit()
     return cluster

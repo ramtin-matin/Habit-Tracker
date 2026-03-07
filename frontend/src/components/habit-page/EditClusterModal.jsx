@@ -13,6 +13,7 @@ function EditClusterModal({
   cluster,
   clusters,
   onEditCluster,
+  onDeleteCluster,
 }) {
   const [clusterName, setClusterName] = useState("");
   const [selectedColor, setSelectedColor] = useState(null);
@@ -35,7 +36,9 @@ function EditClusterModal({
   const isNameChanged = clusterName.trim() !== cluster.name.trim();
   const isColorChanged = selectedColor !== cluster.color;
   const hasDuplicateName = clusters.some(
-    (c) => c.name === clusterName && c.id !== cluster.id,
+    (c) =>
+      c.name.toLowerCase().trim() === clusterName.toLowerCase().trim() &&
+      c.id !== cluster.id,
   );
 
   const canSave =
@@ -53,6 +56,16 @@ function EditClusterModal({
       onClose();
     } catch (err) {
       console.error("Failed to edit cluster:", err);
+      throw err;
+    }
+  };
+
+  const handleDeleteCluster = async () => {
+    try {
+      await onDeleteCluster(cluster.id);
+      onClose();
+    } catch (err) {
+      console.error("Failed to delete cluster:", err);
       throw err;
     }
   };
@@ -111,27 +124,36 @@ function EditClusterModal({
           />
         </div>
 
-        <div className="mt-7 flex items-center justify-end gap-2.5">
+        <div className="mt-7 flex items-center justify-between gap-2.5">
           <button
             type="button"
-            onClick={onClose}
-            className="rounded-lg border border-white/10 px-3.5 py-2 text-sm font-medium text-slate-300 hover:text-slate-100 hover:border-white/20 transition-colors cursor-pointer"
+            className="rounded-lg border border-rose-500/40 px-3.5 py-2 text-sm font-medium text-rose-300 hover:text-rose-200 hover:border-rose-400/60 transition-colors cursor-pointer"
+            onClick={() => handleDeleteCluster()}
           >
-            Cancel
+            Delete Cluster
           </button>
-          <button
-            type="button"
-            disabled={!canSave}
-            className="rounded-lg px-3.5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:text-slate-200"
-            style={{
-              backgroundImage: canSave
-                ? THEME_GRADIENT_CSS
-                : THEME_GRADIENT_CSS_DARK,
-            }}
-            onClick={() => handleEditCluster(clusterName, selectedColor)}
-          >
-            Save
-          </button>
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg border border-white/10 px-3.5 py-2 text-sm font-medium text-slate-300 hover:text-slate-100 hover:border-white/20 transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              disabled={!canSave}
+              className="rounded-lg px-3.5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:text-slate-200"
+              style={{
+                backgroundImage: canSave
+                  ? THEME_GRADIENT_CSS
+                  : THEME_GRADIENT_CSS_DARK,
+              }}
+              onClick={() => handleEditCluster(clusterName, selectedColor)}
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </div>

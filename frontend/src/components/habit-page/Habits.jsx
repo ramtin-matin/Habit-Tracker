@@ -19,6 +19,7 @@ const Habits = () => {
     handleDeleteHabit,
     handleCreateCluster,
     handleEditCluster,
+    handleDeleteCluster,
   } = useHabits();
   const [currentViewDate, setCurrentViewDate] = useState(new Date());
   const [isCreateClusterOpen, setIsCreateClusterOpen] = useState(false);
@@ -161,6 +162,7 @@ const Habits = () => {
         cluster={editingCluster}
         clusters={clusters}
         onEditCluster={handleEditCluster}
+        onDeleteCluster={handleDeleteCluster}
       />
     </div>
   );

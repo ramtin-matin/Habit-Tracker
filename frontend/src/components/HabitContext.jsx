@@ -17,6 +17,7 @@ import {
   getHabitById,
   updateClusterById,
   updateHabitById,
+  deleteCluster,
 } from "../api";
 
 const HabitContext = createContext();
@@ -155,6 +156,25 @@ export const HabitProvider = ({ children }) => {
     }
   };
 
+  const handleDeleteCluster = async (clusterId) => {
+    try {
+      const deletedClusetr = await deleteCluster(clusterId); // backend also setse related habits cluster_id to null
+      // local UI update
+      setClusters((prev) => prev.filter((cluster) => cluster.id !== clusterId));
+      setHabits((prev) =>
+        prev.map((habit) =>
+          habit.cluster_id === clusterId
+            ? { ...habit, cluster_id: null }
+            : habit,
+        ),
+      );
+      return deleteCluster;
+    } catch (err) {
+      console.error("Failed to delete cluster:", err);
+      throw err;
+    }
+  };
+
   return (
     <HabitContext.Provider
       value={{
@@ -169,6 +189,7 @@ export const HabitProvider = ({ children }) => {
         toggleHabitCompletion,
         handleCreateCluster,
         handleEditCluster,
+        handleDeleteCluster,
       }}
     >
       {children}

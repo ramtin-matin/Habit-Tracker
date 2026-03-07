@@ -7,11 +7,17 @@ import {
   THEME_GRADIENT_CSS_DARK,
 } from "./themeGradients.js";
 
-function CreateClusterModal({ isOpen, onClose, onCreateCluster }) {
+function CreateClusterModal({ isOpen, onClose, onCreateCluster, clusters }) {
   const [clusterName, setClusterName] = useState("");
   const [selectedColor, setSelectedColor] = useState(null);
+
+  // logic to see if user is able to create cluster or not
   const hasName = clusterName.trim().length > 0;
-  const canCreate = hasName && Boolean(selectedColor);
+  const hasDuplicateName = clusters.some(
+    (c) => c.name.toLowerCase().trim() === clusterName.toLowerCase().trim(),
+  );
+
+  const canCreate = hasName && Boolean(selectedColor) && !hasDuplicateName;
 
   useEffect(() => {
     if (!isOpen) {
