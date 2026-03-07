@@ -1,5 +1,14 @@
-const GroupHeader = ({ title, count, clusterColor }) => (
-  <div className="flex items-center gap-2 mb-6">
+const GroupHeader = ({ title, count, clusterColor, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={!onClick}
+    className={`mb-6 flex items-center gap-2 ${
+      onClick
+        ? "cursor-pointer transition-opacity hover:opacity-85"
+        : "cursor-default"
+    }`}
+  >
     <div
       className="w-1.5 h-6 rounded-full"
       style={{ backgroundColor: clusterColor }}
@@ -8,7 +17,7 @@ const GroupHeader = ({ title, count, clusterColor }) => (
     <span className="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md text-xs font-bold">
       {count}
     </span>
-  </div>
+  </button>
 );
 
 export default GroupHeader;

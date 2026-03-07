@@ -15,6 +15,7 @@ import {
   getAllHabitLogs,
   getAllHabits,
   getHabitById,
+  updateClusterById,
   updateHabitById,
 } from "../api";
 
@@ -139,6 +140,21 @@ export const HabitProvider = ({ children }) => {
     }
   };
 
+  const handleEditCluster = async (clusterId, updatedFields) => {
+    try {
+      const updatedCluster = await updateClusterById(clusterId, updatedFields);
+      setClusters((prevClusters) =>
+        prevClusters.map((cluster) =>
+          cluster.id === clusterId ? updatedCluster : cluster,
+        ),
+      );
+      return updatedCluster;
+    } catch (err) {
+      console.error("Failed to update cluster:", err);
+      throw err;
+    }
+  };
+
   return (
     <HabitContext.Provider
       value={{
@@ -152,6 +168,7 @@ export const HabitProvider = ({ children }) => {
         getHabitById,
         toggleHabitCompletion,
         handleCreateCluster,
+        handleEditCluster,
       }}
     >
       {children}

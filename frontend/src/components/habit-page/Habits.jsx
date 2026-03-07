@@ -5,6 +5,7 @@ import MonthNavigation from "./MonthNavigation.jsx";
 import { FolderPlus, Plus } from "lucide-react";
 import GroupHeader from "./GroupHeader.jsx";
 import CreateClusterModal from "./CreateClusterModal.jsx";
+import EditClusterModal from "./EditClusterModal.jsx";
 import { THEME_GRADIENT_BG_CLASS } from "./themeGradients.js";
 
 const Habits = () => {
@@ -17,9 +18,11 @@ const Habits = () => {
     toggleHabitCompletion,
     handleDeleteHabit,
     handleCreateCluster,
+    handleEditCluster,
   } = useHabits();
   const [currentViewDate, setCurrentViewDate] = useState(new Date());
   const [isCreateClusterOpen, setIsCreateClusterOpen] = useState(false);
+  const [editingCluster, setEditingCluster] = useState(null);
 
   useEffect(() => {
     async function loadAllHabitLogs() {
@@ -94,6 +97,15 @@ const Habits = () => {
                 title={group.title}
                 count={group.habits.length}
                 clusterColor={group.color}
+                onClick={
+                  group.id === "ungrouped"
+                    ? undefined
+                    : () =>
+                        setEditingCluster(
+                          clusters.find((cluster) => cluster.id === group.id) ??
+                            null,
+                        )
+                }
               />
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -141,6 +153,14 @@ const Habits = () => {
         onClose={() => setIsCreateClusterOpen(false)}
         clusters={clusters}
         onCreateCluster={handleCreateCluster}
+      />
+
+      <EditClusterModal
+        isOpen={Boolean(editingCluster)}
+        onClose={() => setEditingCluster(null)}
+        cluster={editingCluster}
+        clusters={clusters}
+        onEditCluster={handleEditCluster}
       />
     </div>
   );
