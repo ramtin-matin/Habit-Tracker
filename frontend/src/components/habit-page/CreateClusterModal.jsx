@@ -115,7 +115,7 @@ function CreateClusterModal({ isOpen, onClose, onCreateCluster, clusters }) {
           <button
             type="button"
             disabled={!canCreate}
-            className="rounded-lg px-3.5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:text-slate-200"
+            className="rounded-lg px-3.5 py-2 text-sm font-semibold text-white cursor-pointer disabled:cursor-not-allowed disabled:text-slate-200"
             style={{
               backgroundImage: canCreate
                 ? THEME_GRADIENT_CSS

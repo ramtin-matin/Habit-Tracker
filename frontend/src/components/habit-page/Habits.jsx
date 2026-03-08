@@ -98,7 +98,7 @@ const Habits = () => {
           </div>
         </header>
 
-        <div className="space-y-12">
+        <div className="space-y-12 min-h-[70vh]">
           {groupedHabits.map((group) => (
             <section key={group.id}>
               <GroupHeader
@@ -155,7 +155,7 @@ const Habits = () => {
             </section>
           ))}
 
-          <div className="flex justify-center pb-12">
+          <div className="flex justify-center pb-12 min-h-20">
             <button
               className="flex items-center gap-2 text-emerald-300 hover:text-emerald-400 cursor-pointer dark:hover:text-emerald-400 font-medium px-6 py-3 rounded-2xl border border-transparent hover:border-emerald-400 dark:hover:border-emerald-400 transition-colors"
               onClick={() => setIsCreateClusterOpen(true)}
