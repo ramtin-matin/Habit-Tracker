@@ -3,7 +3,6 @@ import { MoreVertical } from "lucide-react";
 import DayCell from "./DayCell";
 import EditHabitModal from "./EditHabitModal.jsx";
 
-const ACCENT_COLOR = "#34d399";
 const DAYS_OF_WEEK = ["S", "M", "T", "W", "T", "F", "S"];
 
 const ProgressBar = ({ progressPercentage, clusterColor }) => (
@@ -127,6 +126,13 @@ function HabitCard({
           {Array.from({ length: daysInMonth }).map((_, index) => {
             const dayNumber = index + 1;
             const dateKey = formatDateKey(year, month, dayNumber);
+            const todayDate = new Date();
+            const todayKey = formatDateKey(
+              todayDate.getFullYear(),
+              todayDate.getMonth(),
+              todayDate.getDate(),
+            );
+            const isDateKeyLaterThanToday = dateKey > todayKey; // used for disabling habit logging on days after today's date
             const isToday =
               todayDateString ===
               new Date(year, month, dayNumber).toDateString(); // used for highlighting current day in grid
@@ -139,6 +145,7 @@ function HabitCard({
                 isCompleted={isCompleted}
                 clusterColor={clusterColor}
                 isToday={isToday}
+                isDateKeyLaterThanToday={isDateKeyLaterThanToday}
                 onClick={() => onToggleCompletion(habit.id, dateKey)}
               />
             );
