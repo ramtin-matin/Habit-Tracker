@@ -219,3 +219,25 @@ SELECT * FROM habit_tracker.clusters WHERE habit_tracker.clusters.user_id = 'USE
 ```sql
 SELECT * FROM habit_tracker.habit_logs JOIN habit_tracker.habits ON habit_tracker.habit_logs.habit_id = habit_tracker.habits.id WHERE habit_tracker.habits.user_id = 'USER-ID';
 ```
+
+## Deployment Notes
+
+- Set allowed frontend origins with `CORS_ALLOWED_ORIGINS` (comma-separated), for example:
+  `CORS_ALLOWED_ORIGINS="https://your-app.com,https://www.your-app.com"`
+- Use environment variables for secrets and DB credentials.
+
+## Demo Security Note
+
+- This project is intentionally deployed as a **portfolio/demo app**.
+- User identity is scoped via `X-User-Id` request header for demo separation.
+- `X-User-Id` is **not production authentication** and can be spoofed.
+- Do not use real/sensitive data with this setup.
+- For production-grade security, replace this with real auth (JWT/session provider) and server-verified identity.
+
+## Rate Limiting Notes
+
+- Write endpoints use per-key rate limits (create/update/delete routes).
+- Limit key is `X-User-Id` when present, otherwise client IP.
+- This setup works for local/dev and single-instance production.
+- If multiple users share one IP and do not send unique `X-User-Id`, they can affect each other's limits.
+- For multi-instance production, use shared limiter storage (for example Redis) so limits remain consistent across all app instances.

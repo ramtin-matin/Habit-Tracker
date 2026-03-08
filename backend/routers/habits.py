@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlmodel import Session, select
 
 from database import get_session
@@ -12,12 +12,15 @@ from dependencies import (
     resolve_user_id,
 )
 from models import Habit, HabitCreate, HabitUpdate
+from rate_limit import limiter
 
 router = APIRouter(prefix="/habits", tags=["habits"])
 
 # create a habit for specific User
 @router.post("", response_model=Habit)
+@limiter.limit("60/minute")
 async def create_habit(
+    request: Request,
     new_habit: HabitCreate,
     session: Session = Depends(get_session),
     user_id: str = Depends(resolve_user_id),
@@ -53,7 +56,9 @@ async def get_habit(
 
 # update a habit for specific User
 @router.patch("/{habit_id}", response_model=Habit)
+@limiter.limit("60/minute")
 async def update_habit(
+    request: Request,
     habit_id: int,
     updated_habit: HabitUpdate,
     session: Session = Depends(get_session),
@@ -78,7 +83,9 @@ async def update_habit(
 
 # delete a habit for specific User
 @router.delete("/{habit_id}", response_model=Habit)
+@limiter.limit("30/minute")
 async def delete_habit(
+    request: Request,
     habit_id: int,
     session: Session = Depends(get_session),
     user_id: str = Depends(resolve_user_id),

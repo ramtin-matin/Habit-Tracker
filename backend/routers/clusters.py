@@ -1,18 +1,21 @@
 from datetime import datetime, UTC
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlmodel import Session, select
 
 from database import get_session
 from dependencies import ensure_user_exists, get_user_cluster_or_404, resolve_user_id
 from models import Cluster, ClusterCreate, ClusterUpdate, Habit
+from rate_limit import limiter
 
 router = APIRouter(prefix="/clusters", tags=["clusters"])
 
 # create a cluster
 @router.post("", response_model=Cluster)
+@limiter.limit("30/minute")
 async def create_cluster(
+    request: Request,
     new_cluster: ClusterCreate,
     session: Session = Depends(get_session),
     user_id: str = Depends(resolve_user_id),
@@ -57,7 +60,9 @@ async def get_cluster_habits(
 
 # delete a User's cluster
 @router.delete("/{cluster_id}", response_model=Cluster)
+@limiter.limit("15/minute")
 async def delete_cluster(
+    request: Request,
     cluster_id: int,
     session: Session = Depends(get_session),
     user_id: str = Depends(resolve_user_id),
@@ -77,7 +82,9 @@ async def delete_cluster(
 
 # update a User's cluster
 @router.patch("/{cluster_id}", response_model=Cluster)
+@limiter.limit("30/minute")
 async def update_cluster(
+    request: Request,
     cluster_id: int,
     updated_cluster: ClusterUpdate,
     session: Session = Depends(get_session),

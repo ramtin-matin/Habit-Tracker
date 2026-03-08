@@ -12,3 +12,14 @@ DATABASE_URL = os.getenv(
     "DATABASE_URL",
     f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
 )
+
+# Comma-separated list. Example:
+# CORS_ALLOWED_ORIGINS="http://localhost:5173,https://app.example.com"
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+    if origin.strip()
+]
+
+CORS_ALLOW_METHODS = ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
+CORS_ALLOW_HEADERS = ["Content-Type", "X-User-Id", "Authorization"]

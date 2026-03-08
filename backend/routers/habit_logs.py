@@ -1,12 +1,13 @@
 from datetime import date
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlmodel import Session, select
 
 from database import get_session
 from dependencies import get_user_habit_or_404, resolve_user_id
 from models import Habit, HabitLog, HabitLogCreate
+from rate_limit import limiter
 
 router = APIRouter(prefix="/habitlogs", tags=["habit-logs"])
 
@@ -31,7 +32,9 @@ async def get_habit_logs(
 
 # create a habit log for given Habit
 @router.post("/{habit_id}", response_model=HabitLog)
+@limiter.limit("180/minute")
 async def create_habit_log(
+    request: Request,
     habit_id: int,
     new_habit_log: HabitLogCreate,
     session: Session = Depends(get_session),
@@ -54,7 +57,9 @@ async def create_habit_log(
 
 # delete a habit log for given Habit
 @router.delete("/{habit_id}", response_model=HabitLog)
+@limiter.limit("180/minute")
 async def delete_habit_log(
+    request: Request,
     habit_id: int,
     log_date: date,
     session: Session = Depends(get_session),
