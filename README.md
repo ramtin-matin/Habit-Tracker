@@ -65,52 +65,47 @@ habittracker/
 
 ## Prerequisites
 
-- Node.js 18+
-- Python 3.11+
-- MySQL
+- Node.js 18+ (Download: https://nodejs.org/)
+- Python 3.11+ (Download: https://www.python.org/downloads/)
+- MySQL 8+ (Download: https://dev.mysql.com/downloads/mysql/)
 
 ## Quick Start
 
-1. Install frontend deps:
+1. Clone and enter project:
+```bash
+git clone <your-repo-url>
+cd habittracker
+```
 
+2. Install frontend packages:
 ```bash
 cd frontend
 npm install
+cd ..
 ```
 
-2. Create Python env and install backend deps:
-
+3. Create Python env and install backend packages:
 ```bash
-cd ..
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-3. Configure backend DB (simple config-file flow):
-
+4. Create backend config file:
 ```bash
 cp backend/config.example.py backend/config.py
 ```
+Then edit `backend/config.py` with your MySQL values.
 
-Then edit `backend/config.py` with your local DB values.
-
-Notes:
-
-- `backend/config.py` is gitignored (safe for local secrets).
-- If you prefer, you can still use environment variables (`DATABASE_URL`, `DB_HOST`, etc.).
-
-4. Run backend:
-
+5. Run backend:
 ```bash
 cd backend
 uvicorn main:app --reload
 ```
 
-5. Run frontend:
-
+6. In a second terminal, run frontend:
 ```bash
-cd ../frontend
+cd frontend
 npm run dev
 ```
 
