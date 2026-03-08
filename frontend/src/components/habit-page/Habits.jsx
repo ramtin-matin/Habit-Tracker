@@ -6,6 +6,8 @@ import { FolderPlus, Plus } from "lucide-react";
 import GroupHeader from "./GroupHeader.jsx";
 import CreateClusterModal from "./CreateClusterModal.jsx";
 import EditClusterModal from "./EditClusterModal.jsx";
+import CreateHabitModal from "./CreateHabitModal.jsx";
+import CreateGlobalHabitModal from "./CreateGlobalHabitModal.jsx";
 import { THEME_GRADIENT_BG_CLASS } from "./themeGradients.js";
 
 const Habits = () => {
@@ -20,10 +22,13 @@ const Habits = () => {
     handleCreateCluster,
     handleEditCluster,
     handleDeleteCluster,
+    handleCreateHabit,
   } = useHabits();
   const [currentViewDate, setCurrentViewDate] = useState(new Date());
   const [isCreateClusterOpen, setIsCreateClusterOpen] = useState(false);
   const [editingCluster, setEditingCluster] = useState(null);
+  const [creatingHabitCluster, setCreatingHabitCluster] = useState(null);
+  const [isCreateHabitOpen, setIsCreateHabitOpen] = useState(false);
 
   useEffect(() => {
     async function loadAllHabitLogs() {
@@ -49,6 +54,7 @@ const Habits = () => {
     groupedHabits.push({
       id: "ungrouped",
       title: "Ungrouped Habits",
+      color: "#8E8E8E",
       habits: ungroupedHabits,
     });
   }
@@ -85,6 +91,7 @@ const Habits = () => {
             />
             <button
               className={`${THEME_GRADIENT_BG_CLASS} cursor-pointer text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all active:scale-95`}
+              onClick={() => setIsCreateHabitOpen(true)}
             >
               <Plus size={20} /> <span>New Habit</span>
             </button>
@@ -128,6 +135,15 @@ const Habits = () => {
                 <button
                   className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center p-8 text-slate-400 cursor-pointer transition-all hover:bg-white dark:hover:bg-slate-900/50 hover:text-[var(--cluster-color)] hover:border-[var(--cluster-color)] group"
                   style={{ "--cluster-color": group.color }}
+                  onClick={() =>
+                    setCreatingHabitCluster(
+                      group.id === "ungrouped"
+                        ? { id: null, name: "Ungrouped" }
+                        : (clusters.find(
+                            (cluster) => cluster.id === group.id,
+                          ) ?? null),
+                    )
+                  }
                 >
                   <Plus
                     size={32}
@@ -164,6 +180,22 @@ const Habits = () => {
         clusters={clusters}
         onEditCluster={handleEditCluster}
         onDeleteCluster={handleDeleteCluster}
+      />
+
+      <CreateHabitModal
+        isOpen={Boolean(creatingHabitCluster)}
+        onClose={() => setCreatingHabitCluster(null)}
+        cluster={creatingHabitCluster}
+        habits={habits}
+        onCreateHabit={handleCreateHabit}
+      />
+
+      <CreateGlobalHabitModal
+        isOpen={isCreateHabitOpen}
+        onClose={() => setIsCreateHabitOpen(false)}
+        clusters={clusters}
+        habits={habits}
+        onCreateHabit={handleCreateHabit}
       />
     </div>
   );

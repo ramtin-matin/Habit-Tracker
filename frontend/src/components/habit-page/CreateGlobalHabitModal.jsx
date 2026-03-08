@@ -5,57 +5,50 @@ import {
   THEME_GRADIENT_CSS_DARK,
 } from "./themeGradients.js";
 
-function EditHabitModal({
+function CreateGlobalHabitModal({
   isOpen,
   onClose,
-  habit,
   clusters,
-  onDeleteHabit,
-  onEditHabit,
+  habits,
+  onCreateHabit,
 }) {
   const [habitName, setHabitName] = useState("");
   const [selectedClusterId, setSelectedClusterId] = useState("");
 
   useEffect(() => {
-    if (!isOpen || !habit) {
+    if (!isOpen) {
       return;
     }
 
-    setHabitName(habit.name ?? "");
-    setSelectedClusterId(habit.cluster_id ?? "");
-  }, [isOpen, habit]);
+    setHabitName("");
+    setSelectedClusterId("");
+  }, [isOpen]);
 
-  if (!isOpen || !habit) {
+  if (!isOpen) {
     return null;
   }
 
-  // logic to see if user is able to edit habit or not
+  // logic to see if user is able to create habit or not
   const hasName = habitName.trim().length > 0;
-  const isNameChanged = habitName.trim() !== habit.name.trim();
   const targetClusterId = selectedClusterId || null;
-  const isClusterChanged = targetClusterId != (habit.cluster_id ?? "");
+  const hasDuplicateName = habits.some(
+    (h) =>
+      h.name.toLowerCase().trim() === habitName.toLowerCase().trim() &&
+      (h.cluster_id ?? null) == targetClusterId, // make sure the cluster chosen doesn't have the name user chose
+  );
 
-  const canSave = hasName && (isNameChanged || isClusterChanged);
+  const canSave = hasName && !hasDuplicateName;
 
-  const handleEditHabit = async () => {
+  const handleCreateHabit = async () => {
+    const newHabit = {
+      name: habitName.trim(),
+      cluster_id: targetClusterId,
+    };
     try {
-      await onEditHabit(habit.id, {
-        name: habitName.trim(),
-        cluster_id: targetClusterId,
-      });
+      await onCreateHabit(newHabit);
       onClose();
     } catch (err) {
-      console.error("Failed to edit habit:", err);
-      throw err;
-    }
-  };
-
-  const handleDeleteHabit = async () => {
-    try {
-      await onDeleteHabit(habit.id);
-      onClose();
-    } catch (err) {
-      console.error("Failed to delete habit:", err);
+      console.error("Failed to create habit:", err);
       throw err;
     }
   };
@@ -72,10 +65,10 @@ function EditHabitModal({
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
-              Edit Habit
+              New Habit
             </p>
-            <h3 className="mt-1 text-lg font-semibold tracking-tight text-slate-50">
-              {habit.name}
+            <h3 className="mt-1 text-lg tracking-tight text-slate-100">
+              Choose a <b>cluster</b> and create
             </h3>
           </div>
           <button
@@ -90,32 +83,32 @@ function EditHabitModal({
 
         <div className="mt-6">
           <label
-            htmlFor="edit-habit-name"
+            htmlFor="create-habit-name-global"
             className="block text-sm font-medium text-slate-300"
           >
             Habit Name
           </label>
           <div className="mt-2 rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2.5">
             <input
-              id="edit-habit-name"
+              id="create-habit-name-global"
               value={habitName}
               onChange={(event) => setHabitName(event.target.value)}
+              placeholder="Habit name..."
               className="w-full bg-transparent text-sm outline-none placeholder:text-slate-500"
-              placeholder="Read for 20 minutes"
             />
           </div>
         </div>
 
         <div className="mt-6">
           <label
-            htmlFor="edit-habit-cluster"
+            htmlFor="create-habit-cluster-global"
             className="block text-sm font-medium text-slate-300"
           >
             Cluster
           </label>
           <div className="mt-2 relative rounded-xl border border-white/10 bg-slate-900/60">
             <select
-              id="edit-habit-cluster"
+              id="create-habit-cluster-global"
               value={selectedClusterId}
               onChange={(event) => setSelectedClusterId(event.target.value)}
               className="w-full appearance-none bg-transparent px-3 py-2.5 pr-10 text-sm text-slate-100 outline-none"
@@ -140,40 +133,31 @@ function EditHabitModal({
           </div>
         </div>
 
-        <div className="mt-7 flex items-center justify-between gap-2.5">
+        <div className="mt-7 flex items-center justify-end gap-2.5">
           <button
             type="button"
-            className="rounded-lg border border-rose-500/40 px-3.5 py-2 text-sm font-medium text-rose-300 hover:text-rose-200 hover:border-rose-400/60 transition-colors cursor-pointer"
-            onClick={() => handleDeleteHabit()}
+            onClick={onClose}
+            className="rounded-lg border border-white/10 px-3.5 py-2 text-sm font-medium text-slate-300 hover:text-slate-100 hover:border-white/20 transition-colors cursor-pointer"
           >
-            Delete Habit
+            Cancel
           </button>
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-lg border border-white/10 px-3.5 py-2 text-sm font-medium text-slate-300 hover:text-slate-100 hover:border-white/20 transition-colors cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              disabled={!canSave}
-              className="rounded-lg px-3.5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:text-slate-200"
-              style={{
-                backgroundImage: canSave
-                  ? THEME_GRADIENT_CSS
-                  : THEME_GRADIENT_CSS_DARK,
-              }}
-              onClick={() => handleEditHabit()}
-            >
-              Save
-            </button>
-          </div>
+          <button
+            type="button"
+            disabled={!canSave}
+            className="rounded-lg px-3.5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:text-slate-200"
+            style={{
+              backgroundImage: canSave
+                ? THEME_GRADIENT_CSS
+                : THEME_GRADIENT_CSS_DARK,
+            }}
+            onClick={() => handleCreateHabit()}
+          >
+            Create
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-export default EditHabitModal;
+export default CreateGlobalHabitModal;

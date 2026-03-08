@@ -90,7 +90,7 @@ export const HabitProvider = ({ children }) => {
     }
   };
 
-  const addHabit = async (habitInput) => {
+  const handleCreateHabit = async (habitInput) => {
     try {
       const createdHabit = await createHabit(habitInput);
       setHabits((prev) => [createdHabit, ...prev]);
@@ -158,7 +158,7 @@ export const HabitProvider = ({ children }) => {
 
   const handleDeleteCluster = async (clusterId) => {
     try {
-      const deletedClusetr = await deleteCluster(clusterId); // backend also setse related habits cluster_id to null
+      const deletedCluster = await deleteCluster(clusterId); // backend also sets related habits cluster_id to null
       // local UI update
       setClusters((prev) => prev.filter((cluster) => cluster.id !== clusterId));
       setHabits((prev) =>
@@ -168,7 +168,7 @@ export const HabitProvider = ({ children }) => {
             : habit,
         ),
       );
-      return deleteCluster;
+      return deletedCluster;
     } catch (err) {
       console.error("Failed to delete cluster:", err);
       throw err;
@@ -178,10 +178,10 @@ export const HabitProvider = ({ children }) => {
   return (
     <HabitContext.Provider
       value={{
-        addHabit,
         clusters,
         habitLogs,
         habits,
+        handleCreateHabit,
         handleDeleteHabit,
         handleEditHabit,
         loadHabitLogs,

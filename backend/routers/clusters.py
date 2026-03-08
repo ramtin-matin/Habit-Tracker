@@ -55,7 +55,7 @@ async def get_cluster_habits(
     statement = select(Habit).where(Habit.cluster_id == cluster_id, Habit.user_id == user_id)
     return session.exec(statement).all()
 
-# delete a User's cluseter
+# delete a User's cluster
 @router.delete("/{cluster_id}", response_model=Cluster)
 async def delete_cluster(
     cluster_id: int,
@@ -64,8 +64,8 @@ async def delete_cluster(
 ):
     cluster = get_user_cluster_or_404(session, cluster_id, user_id)
 
-    # reassing cluster's habits
-    statement = select(Habit).where(Habit.cluster_id == cluster_id)
+    # reassigning cluster's habits
+    statement = select(Habit).where(Habit.cluster_id == cluster_id, Habit.user_id == user_id)
     habits = session.exec(statement).all()
     for habit in habits:
         habit.cluster_id = None

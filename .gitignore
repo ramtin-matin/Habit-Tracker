@@ -1,22 +1,28 @@
-backend/__pycache__/
+# Python cache/build artifacts
 __pycache__/
 *.pyc
+
+# Backend local database/artifacts
 backend/habits.db
+backend/__pycache__/
 
-
+# Environment files
 .env
 .env.*
+*.local
 backend/config.py
 
-
-# macOS system files
-.DS_Store
-
-# Virtual environment
+# Virtual environments
 env/
+.venv/
 
-# React dependencies
+# Node/Vite artifacts
 node_modules/
+dist/
+dist-ssr/
+
+# DB config file
+backend/config.py
 
 # Logs
 logs
@@ -27,16 +33,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# macOS system files
+.DS_Store
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
