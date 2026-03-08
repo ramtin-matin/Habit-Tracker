@@ -147,3 +147,75 @@ From `frontend/`:
 - `PATCH /clusters/{cluster_id}`
 - `DELETE /clusters/{cluster_id}`
 - `GET /clusters/{cluster_id}/habits`
+
+## MySQL Schema
+
+```sql
+USE habit_tracker;
+
+CREATE TABLE users (
+	id CHAR(36) PRIMARY KEY,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE clusters (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id CHAR(36) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    color VARCHAR(7) NOT NULL DEFAULT '#8E8E8E',
+
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE habits (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	user_id CHAR(36) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    cluster_id INT NULL,
+
+	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (cluster_id) REFERENCES clusters(id) ON DELETE SET NULL
+);
+
+CREATE TABLE habit_logs (
+    log_date DATE NOT NULL,
+    habit_id INT NOT NULL,
+
+    PRIMARY KEY (habit_id, log_date),
+
+    FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE
+);
+```
+
+## SQL Utility Queries
+
+**To get all users:**
+
+```sql
+SELECT * FROM habit_tracker.users;
+```
+
+**To get all habits for a user:**
+
+```sql
+SELECT * FROM habit_tracker.habits WHERE habit_tracker.habits.user_id = 'USER-ID';
+```
+
+**To get all clusters for a user:**
+
+```sql
+SELECT * FROM habit_tracker.clusters WHERE habit_tracker.clusters.user_id = 'USER-ID';
+```
+
+**To get all habit logs for a user:**
+
+```sql
+SELECT * FROM habit_tracker.habit_logs JOIN habit_tracker.habits ON habit_tracker.habit_logs.habit_id = habit_tracker.habits.id WHERE habit_tracker.habits.user_id = 'USER-ID';
+```
