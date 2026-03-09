@@ -31,8 +31,8 @@ function CreateClusterModal({ isOpen, onClose, onCreateCluster, clusters }) {
 
   const handleCreateCluster = async () => {
     const newCluster = {
-      name: newName.trim(),
-      color: newColor,
+      name: clusterName.trim(),
+      color: selectedColor,
     };
     try {
       await onCreateCluster(newCluster);
