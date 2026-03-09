@@ -33,7 +33,7 @@ function EditHabitModal({
   const hasName = habitName.trim().length > 0;
   const isNameChanged = habitName.trim() !== habit.name.trim();
   const targetClusterId = selectedClusterId || null;
-  const isClusterChanged = targetClusterId != (habit.cluster_id ?? "");
+  const isClusterChanged = targetClusterId != (habit.cluster_id ?? null);
 
   const canSave = hasName && (isNameChanged || isClusterChanged);
 
@@ -159,7 +159,7 @@ function EditHabitModal({
             <button
               type="button"
               disabled={!canSave}
-              className="rounded-lg px-3.5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:text-slate-200"
+              className="rounded-lg px-3.5 py-2 text-sm font-semibold text-white cursor-pointer disabled:cursor-not-allowed disabled:text-slate-200"
               style={{
                 backgroundImage: canSave
                   ? THEME_GRADIENT_CSS
