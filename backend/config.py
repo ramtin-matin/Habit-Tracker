@@ -3,6 +3,7 @@ import os
 SQL_ECHO = os.getenv("SQL_ECHO", "false").lower() in {"1", "true", "yes", "on"}
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = DATABASE_URL.replace("mysql://", "mysql+pymysql://")
 
 # Comma-separated list. Example:
 # CORS_ALLOWED_ORIGINS="http://localhost:5173,https://app.example.com"
