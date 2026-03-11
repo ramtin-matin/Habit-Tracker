@@ -1,5 +1,9 @@
 // Base URL for FastAPI backend
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL;
+
+if (!API_URL) {
+  throw new Error("VITE_API_URL is not defined");
+}
 const USER_ID_KEY = "habit_tracker_user_id";
 
 function getOrCreateUserId() {
