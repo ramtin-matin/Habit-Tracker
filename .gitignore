@@ -10,7 +10,6 @@ backend/__pycache__/
 .env
 .env.*
 *.local
-backend/config.py
 
 # Virtual environments
 env/
@@ -22,7 +21,7 @@ dist/
 dist-ssr/
 
 # DB config file
-backend/config.py
+backend/localConfig.py
 
 # Logs
 logs
