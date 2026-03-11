@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi import _rate_limit_exceeded_handler
+from sqlmodel import SQLModel
 
 from config import (
     CORS_ALLOWED_ORIGINS,
@@ -11,6 +12,7 @@ from config import (
     CORS_ALLOW_HEADERS
 )
 
+from database import engine
 from routers.clusters import router as clusters_router
 from routers.habit_logs import router as habit_logs_router
 from routers.habits import router as habits_router
@@ -30,6 +32,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+def create_tables() -> None:
+    SQLModel.metadata.create_all(engine)
 
 app.include_router(habits_router)
 app.include_router(habit_logs_router)
