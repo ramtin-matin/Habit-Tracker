@@ -2,6 +2,8 @@
 
 A full-stack habit tracking app with clusters, daily logs, and ungrouped habits.
 
+Hosted on: https://habitset.vercel.app/
+
 ## Overview
 
 - Frontend: React + Vite + Tailwind
