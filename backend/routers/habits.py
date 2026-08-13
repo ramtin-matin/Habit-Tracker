@@ -11,7 +11,7 @@ from dependencies import (
     get_user_habit_or_404,
     resolve_user_id,
 )
-from models import Habit, HabitCreate, HabitUpdate
+from models import Habit, HabitCreate, HabitLog, HabitUpdate
 from rate_limit import limiter
 
 router = APIRouter(prefix="/habits", tags=["habits"])
@@ -91,6 +91,15 @@ async def delete_habit(
     user_id: str = Depends(resolve_user_id),
 ):
     habit = get_user_habit_or_404(session, habit_id, user_id)
+
+    deleted_habit = Habit.model_validate(habit)
+    habit_logs = session.exec(
+        select(HabitLog).where(HabitLog.habit_id == habit_id)
+    ).all()
+
+    for habit_log in habit_logs:
+        session.delete(habit_log)
+
     session.delete(habit)
     session.commit()
-    return habit
+    return deleted_habit
