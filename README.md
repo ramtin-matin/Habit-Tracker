@@ -6,11 +6,7 @@ Hosted app: https://habitset.vercel.app/
 
 ## Demo
 
-<!-- Add demo GIF here -->
-
-```md
 ![HabitTracker demo](frontend/src/assets/habit-tracker-demo.gif)
-```
 
 ## Tech Stack
 
