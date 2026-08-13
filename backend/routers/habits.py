@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter, Depends, Request
+from sqlalchemy import delete
 from sqlmodel import Session, select
 
 from database import get_session
@@ -93,12 +94,8 @@ async def delete_habit(
     habit = get_user_habit_or_404(session, habit_id, user_id)
 
     deleted_habit = Habit.model_validate(habit)
-    habit_logs = session.exec(
-        select(HabitLog).where(HabitLog.habit_id == habit_id)
-    ).all()
-
-    for habit_log in habit_logs:
-        session.delete(habit_log)
+    session.exec(delete(HabitLog).where(HabitLog.habit_id == habit_id))
+    session.flush()
 
     session.delete(habit)
     session.commit()
